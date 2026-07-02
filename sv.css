@@ -1,0 +1,216 @@
+/* ============================================================
+   Presa — Services slide variants  ·  base 1280×720
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --bg:#FFFFFF; --bg-subtle:#F6F7F9; --bg-sunken:#0C0E12;
+  --border:#E9EBEF; --border-strong:#DADDE3;
+  --text:#0E1116; --text-muted:#5B6573; --text-faint:#9AA2AE; --text-invert:#fff;
+  --red:#E5322B; --red-600:#CC241E; --red-700:#AC1B16; --red-50:#FFF2F0; --red-100:#FCE0DC;
+  --ink-700:#15181F; --ink-600:#1C2029;
+  --font-sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --shadow-sm:0 1px 2px rgba(14,17,22,.04),0 2px 6px rgba(14,17,22,.05);
+  --shadow-md:0 6px 22px -6px rgba(14,17,22,.10),0 2px 6px rgba(14,17,22,.05);
+  --shadow-red:0 12px 28px -10px rgba(229,50,43,.35);
+}
+
+/* ---------- Slide shell ---------- */
+.sv-slide{
+  position:relative; width:100%; height:100%;
+  background:var(--bg); overflow:hidden;
+  font-family:var(--font-sans); color:var(--text);
+  display:flex; -webkit-font-smoothing:antialiased;
+}
+.sv-accent{
+  width:10px; flex:0 0 10px; height:100%;
+  background:linear-gradient(180deg,var(--red),var(--red-700));
+}
+.sv-inner{ flex:1; min-width:0; display:flex; flex-direction:column; }
+.sv-head{ display:flex; align-items:center; justify-content:space-between; }
+.sv-eyebrow{
+  font-family:var(--font-mono); font-size:12px; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--red);
+  display:inline-flex; align-items:center; gap:9px;
+}
+.sv-eyebrow i{ width:20px; height:2px; background:var(--red); display:inline-block; }
+.sv-corner{
+  width:30px; height:30px; border-radius:8px; background:var(--red);
+  box-shadow:var(--shadow-red); display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:3.2px;
+}
+.sv-corner span{ width:13px; height:2px; background:#fff; border-radius:2px; }
+
+.sv-body{ flex:1; min-height:0; display:flex; flex-direction:column; }
+.sv-title{ font-size:40px; font-weight:800; letter-spacing:-.02em; line-height:1.05; }
+.sv-title.lg{ font-size:46px; }
+
+.sv-foot{
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top:18px; border-top:1px solid var(--border); margin-top:auto;
+}
+.sv-wordmark{ display:flex; align-items:center; gap:9px; font-weight:800; font-size:18px; letter-spacing:-.01em; }
+.sv-page{ font-family:var(--font-mono); font-size:13px; color:var(--text-faint); letter-spacing:.04em; }
+.sv-page em{ font-style:normal; opacity:.6; margin:0 2px; }
+
+/* ---------- Reusable bits ---------- */
+.svc-icon-badge{
+  display:flex; align-items:center; justify-content:center;
+  border-radius:14px; color:var(--red); flex:0 0 auto;
+}
+.badge-soft{ background:var(--bg-subtle); border:1px solid var(--border); }
+.badge-tint{ background:var(--red-50); border:1px solid var(--red-100); }
+
+/* ============================================================
+   V1 — Карточки (классический)
+   ============================================================ */
+.v1-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; flex:1; margin-top:30px; }
+.v1-card{
+  background:var(--bg); border:1px solid var(--border); border-radius:16px;
+  box-shadow:var(--shadow-sm); padding:24px 22px;
+  display:flex; flex-direction:column; gap:14px;
+}
+.v1-card .svc-icon-badge{ width:50px; height:50px; }
+.v1-h{ font-size:20px; font-weight:700; letter-spacing:-.01em; }
+.v1-d{ font-size:14.5px; line-height:1.45; color:var(--text-muted); }
+
+/* ============================================================
+   V2 — Список с акцентами
+   ============================================================ */
+.v2-wrap{ display:grid; grid-template-columns:1.15fr .85fr; gap:34px; flex:1; margin-top:28px; }
+.v2-list{ display:flex; flex-direction:column; }
+.v2-row{ display:flex; gap:16px; align-items:flex-start; padding:15px 0; border-bottom:1px solid var(--border); }
+.v2-row:last-child{ border-bottom:none; }
+.v2-row .svc-icon-badge{ width:42px; height:42px; border-radius:11px; }
+.v2-rt{ font-size:17px; font-weight:700; }
+.v2-rd{ font-size:13.5px; color:var(--text-muted); margin-top:2px; }
+.v2-panel{
+  background:var(--bg-subtle); border:1px solid var(--border); border-radius:20px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:36px; gap:22px;
+}
+.v2-panel .pico{
+  width:78px; height:78px; border-radius:20px; background:var(--red);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  box-shadow:var(--shadow-red);
+}
+.v2-pt{ font-size:21px; font-weight:800; line-height:1.25; letter-spacing:-.01em; }
+.v2-pl{ width:42px; height:3px; border-radius:3px; background:var(--red); }
+
+/* ============================================================
+   V3 — Флагман + дополнительные
+   ============================================================ */
+.v3-wrap{ display:grid; grid-template-columns:1fr 1fr 1fr; grid-template-rows:1fr 1fr; gap:18px; flex:1; margin-top:30px; }
+.v3-hero{
+  grid-row:1 / span 2; background:var(--bg-sunken); color:#fff;
+  border-radius:18px; padding:30px; display:flex; flex-direction:column;
+  justify-content:space-between; position:relative; overflow:hidden;
+}
+.v3-hero::after{ content:""; position:absolute; right:-40px; top:-40px; width:160px; height:160px;
+  background:radial-gradient(circle,rgba(229,50,43,.28),transparent 70%); }
+.v3-hero .hico{
+  width:58px; height:58px; border-radius:15px; background:var(--red); color:#fff;
+  display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-red);
+}
+.v3-ht{ font-size:25px; font-weight:800; margin-top:auto; }
+.v3-hd{ font-size:14.5px; line-height:1.5; color:rgba(255,255,255,.72); margin-top:8px; }
+.v3-card{
+  background:var(--bg); border:1px solid var(--border); border-radius:15px;
+  box-shadow:var(--shadow-sm); padding:20px; display:flex; flex-direction:column; gap:11px;
+}
+.v3-card .svc-icon-badge{ width:44px; height:44px; border-radius:12px; }
+.v3-h{ font-size:17px; font-weight:700; }
+.v3-d{ font-size:13px; line-height:1.4; color:var(--text-muted); }
+
+/* ============================================================
+   V4 — Иконки в строку (минимализм)
+   ============================================================ */
+.v4-row{ display:grid; grid-template-columns:repeat(6,1fr); gap:20px; flex:1; align-content:center; margin-top:20px; }
+.v4-item{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px; }
+.v4-item .svc-icon-badge{ width:62px; height:62px; border-radius:50%; }
+.v4-h{ font-size:16px; font-weight:700; }
+.v4-d{ font-size:12.5px; line-height:1.4; color:var(--text-muted); }
+.v4-sep{ width:1px; align-self:stretch; background:var(--border); }
+
+/* ============================================================
+   V5 — С фото / визуалами
+   ============================================================ */
+.v5-row{ display:grid; grid-template-columns:repeat(6,1fr); gap:16px; flex:1; margin-top:28px; }
+.v5-card{ display:flex; flex-direction:column; }
+.v5-photo{
+  position:relative; border-radius:14px; overflow:hidden; aspect-ratio:1/1.15;
+  background:linear-gradient(150deg,#1b1f27,#0c0e12);
+}
+.v5-photo .ph-grid{ position:absolute; inset:0; opacity:.5;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:18px 18px; }
+.v5-photo .ph-glow{ position:absolute; inset:0;
+  background:radial-gradient(120px 120px at 70% 25%,rgba(229,50,43,.45),transparent 70%); }
+.v5-photo .ph-ic{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.85); }
+.v5-fab{
+  width:38px; height:38px; border-radius:50%; background:var(--red); color:#fff;
+  display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-red);
+  margin:-19px auto 0; position:relative; z-index:2; border:3px solid #fff;
+}
+.v5-h{ font-size:15px; font-weight:700; text-align:center; margin-top:12px; }
+.v5-d{ font-size:11.5px; line-height:1.4; color:var(--text-muted); text-align:center; margin-top:4px; }
+
+/* ============================================================
+   V6 — Две колонки: преимущества + результаты
+   ============================================================ */
+.v6-wrap{ display:grid; grid-template-columns:1.05fr .95fr; gap:34px; flex:1; margin-top:26px; }
+.v6-list{ display:flex; flex-direction:column; justify-content:center; gap:16px; }
+.v6-row{ display:flex; gap:14px; align-items:flex-start; }
+.v6-tick{ width:24px; height:24px; border-radius:50%; background:var(--red); color:#fff;
+  display:flex; align-items:center; justify-content:center; flex:0 0 auto; margin-top:1px; box-shadow:var(--shadow-red); }
+.v6-rt{ font-size:16.5px; font-weight:700; }
+.v6-rd{ font-size:13px; color:var(--text-muted); margin-top:1px; }
+.v6-panel{ background:var(--bg-subtle); border:1px solid var(--border); border-radius:20px; padding:34px; display:flex; flex-direction:column; justify-content:center; }
+.v6-pt{ font-size:18px; font-weight:800; color:var(--red); margin-bottom:24px; }
+.v6-stats{ display:grid; grid-template-columns:1fr 1fr; gap:26px 22px; }
+.v6-num{ font-size:42px; font-weight:800; letter-spacing:-.03em; color:var(--red); line-height:1; }
+.v6-lab{ font-size:13px; color:var(--text-muted); margin-top:7px; line-height:1.35; }
+.v6-stat.wide{ grid-column:1 / span 2; padding-top:22px; border-top:1px solid var(--border-strong); }
+
+/* ============================================================
+   V7 — Блоки с акцентным цветом
+   ============================================================ */
+.v7-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; flex:1; margin-top:30px; }
+.v7-card{ border-radius:16px; padding:24px 22px; display:flex; flex-direction:column; gap:12px; color:#fff; }
+.v7-card.red{ background:linear-gradient(155deg,var(--red),var(--red-700)); box-shadow:var(--shadow-red); }
+.v7-card.dark{ background:linear-gradient(155deg,var(--ink-600),var(--bg-sunken)); }
+.v7-card .svc-icon-badge{ width:46px; height:46px; border-radius:12px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.18); color:#fff; }
+.v7-h{ font-size:19px; font-weight:700; }
+.v7-d{ font-size:13.5px; line-height:1.45; color:rgba(255,255,255,.8); }
+
+/* ============================================================
+   V8 — Процесс / как это работает
+   ============================================================ */
+.v8-row{ display:flex; align-items:flex-start; justify-content:space-between; flex:1; align-content:center; margin-top:24px; }
+.v8-step{ display:flex; flex-direction:column; align-items:center; text-align:center; width:200px; }
+.v8-num{ width:78px; height:78px; border-radius:50%; border:2px solid var(--border-strong); background:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:30px; font-weight:800; color:var(--text); box-shadow:var(--shadow-sm); }
+.v8-step.active .v8-num{ border-color:var(--red); color:var(--red); background:var(--red-50); }
+.v8-h{ font-size:17px; font-weight:700; margin-top:18px; }
+.v8-d{ font-size:13px; line-height:1.45; color:var(--text-muted); margin-top:8px; }
+.v8-arrow{ flex:1; display:flex; align-items:center; justify-content:center; margin-top:39px; color:var(--border-strong); }
+.v8-arrow svg{ width:100%; max-width:80px; }
+
+/* ============================================================
+   V9 — Табличный / сравнение
+   ============================================================ */
+.v9-table{ width:100%; border-collapse:separate; border-spacing:0; margin-top:26px; flex:1; }
+.v9-table th,.v9-table td{ text-align:left; padding:0; }
+.v9-table thead th{ font-size:14px; font-weight:700; padding:14px 18px; vertical-align:middle; }
+.v9-table thead th.center{ text-align:center; }
+.v9-th-presa{ background:var(--red); color:#fff; border-radius:10px 10px 0 0; }
+.v9-table tbody td{ font-size:14.5px; padding:14px 18px; border-top:1px solid var(--border); }
+.v9-table tbody td.feat{ font-weight:600; }
+.v9-table tbody td.center{ text-align:center; }
+.v9-col-presa{ background:var(--red-50); }
+.v9-table tbody tr:last-child td.v9-col-presa{ border-radius:0 0 10px 10px; }
+.v9-ck{ display:inline-flex; }
+.v9-ck.yes{ color:var(--red); }
+.v9-ck.mid{ color:var(--text-faint); }
+.v9-ck.no{ color:var(--border-strong); }

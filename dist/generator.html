@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presa — Конструктор презентаций</title>
+<link rel="stylesheet" href="assets/styles.css" />
+<link rel="stylesheet" href="assets/constructor.css" />
+</head>
+<body>
+<div id="root"></div>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- pptxgenjs (client-side PPTX export) -->
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+
+<!-- Data layer (plain JS, runs first) -->
+<script src="assets/data.js"></script>
+<script src="assets/templates.js"></script>
+<script src="assets/fit.js"></script>
+<script src="assets/ai-helpers.js"></script>
+<script src="assets/pptx-render.js"></script>
+
+<!-- View layer (Babel) -->
+<script type="text/babel" src="assets/slide-layouts.jsx"></script>
+<script type="text/babel" src="assets/layouts-construction.jsx"></script>
+<script type="text/babel" src="assets/cx-ui.jsx"></script>
+<script type="text/babel" src="assets/cx-style-showcase.jsx"></script>
+<script type="text/babel" src="assets/field-editor.jsx"></script>
+<script type="text/babel" src="assets/cx-stage.jsx"></script>
+<script type="text/babel" src="assets/cx-panels.jsx"></script>
+<script type="text/babel" src="assets/cx-modals.jsx"></script>
+<script type="text/babel" src="assets/cx-wizard-steps.jsx"></script>
+<script type="text/babel" src="assets/cx-wizard-flow.jsx"></script>
+<script type="text/babel" src="assets/cx-wizard.jsx"></script>
+<script type="text/babel" src="assets/constructor.jsx"></script>
+<script type="text/babel" data-presets="react">
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(React.createElement(window.PresaConstructor));
+</script>
+</body>
+</html>

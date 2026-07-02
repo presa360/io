@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presa — Спринт 3: Дорожная карта, команда, процесс</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#FFFFFF; --bg-subtle:#F6F7F9; --bg-sunken:#0C0E12;
+    --border:#E9EBEF; --border-strong:#DADDE3;
+    --text:#0E1116; --muted:#5B6573; --faint:#9AA2AE; --invert:#fff;
+    --red:#E5322B; --red-600:#CC241E; --red-700:#AC1B16; --red-50:#FFF2F0; --red-100:#FCE0DC;
+    --ink-700:#15181F; --ink-600:#1C2029;
+    --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sh-sm:0 1px 2px rgba(14,17,22,.04),0 2px 6px rgba(14,17,22,.05);
+    --sh-md:0 6px 22px -6px rgba(14,17,22,.10),0 2px 6px rgba(14,17,22,.05);
+    --sh-red:0 12px 28px -10px rgba(229,50,43,.35);
+    --pagebg:#ECEEF1;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--pagebg);font-family:var(--sans);color:var(--text);}
+
+  .top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--border);}
+  .top__in{max-width:1180px;margin:0 auto;padding:15px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:.01em;}
+  .brand__mk{width:27px;height:27px;border-radius:7px;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6px;box-shadow:var(--sh-red);}
+  .brand__mk span{width:12px;height:2px;background:#fff;border-radius:2px;}
+  .pill{font:600 12px var(--mono);color:var(--muted);background:#fff;border:1px solid var(--border);border-radius:99px;padding:6px 13px;letter-spacing:.02em;}
+  .note{max-width:1180px;margin:22px auto 6px;padding:0 26px;color:var(--muted);font-size:13.5px;line-height:1.6;}
+  .note b{color:var(--text);}
+
+  .stack{max-width:1180px;margin:0 auto;padding:18px 26px 100px;display:flex;flex-direction:column;gap:14px;}
+  .group{display:flex;align-items:center;gap:12px;margin:26px 2px 4px;}
+  .group__n{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--red);}
+  .group__l{flex:1;height:1px;background:var(--border-strong);}
+  .group__c{font:600 12px var(--mono);color:var(--faint);}
+
+  .frame__bar{display:flex;align-items:center;gap:11px;margin:14px 2px 9px;}
+  .frame__id{font:600 11.5px var(--mono);color:#fff;background:var(--text);padding:3px 8px;border-radius:6px;letter-spacing:.02em;}
+  .frame__t{font-size:13.5px;font-weight:700;letter-spacing:-0.01em;white-space:nowrap;}
+  .frame__tpl{font:500 11.5px var(--mono);color:var(--faint);margin-left:auto;letter-spacing:.01em;}
+  .card{border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(14,17,22,.10);border:1px solid rgba(14,17,22,.06);}
+
+  /* ============ SLIDE BASE ============ */
+  .slide{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;background:var(--bg);font-family:var(--sans);color:var(--text);}
+  .slide h1,.slide h2,.slide h3{margin:0;}
+  .accent{position:absolute;left:0;top:0;bottom:0;width:1.1cqw;background:linear-gradient(180deg,var(--red),var(--red-700));z-index:5;}
+  .pad{position:absolute;inset:0;padding:6cqw 7cqw 5cqw;display:flex;flex-direction:column;}
+  .eyebrow{display:inline-flex;align-items:center;gap:1.1cqw;font:600 1.5cqw var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--red);}
+  .eyebrow i{width:2.4cqw;height:0.22cqw;background:var(--red);display:inline-block;}
+  .s-title{font-weight:800;font-size:3.9cqw;letter-spacing:-0.02em;line-height:1.06;margin:1.7cqw 0 0;}
+  .s-sub{margin:1.2cqw 0 0;font-size:1.75cqw;line-height:1.45;color:var(--muted);max-width:78%;}
+  .foot{position:absolute;left:7cqw;right:7cqw;bottom:2.5cqw;display:flex;align-items:center;justify-content:space-between;font-size:1.4cqw;}
+  .foot__wm{display:flex;align-items:center;gap:0.9cqw;font-weight:800;letter-spacing:-.01em;color:var(--text);}
+  .foot__wm b{width:1.7cqw;height:1.7cqw;border-radius:0.4cqw;background:var(--red);display:inline-block;}
+  .foot__pg{font-family:var(--mono);color:var(--faint);letter-spacing:.04em;}
+
+  /* photo placeholder */
+  .ph{position:relative;overflow:hidden;background:linear-gradient(150deg,#1b1f27,#0c0e12);}
+  .ph .grid{position:absolute;inset:0;opacity:.5;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:2.4cqw 2.4cqw;}
+  .ph .glow{position:absolute;inset:0;background:radial-gradient(30cqw 30cqw at 60% 30%,rgba(229,50,43,.4),transparent 66%);}
+  .ph .ini{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:800 5cqw var(--sans);color:rgba(255,255,255,.86);}
+
+  /* ===== R4 — Дорожная карта: горизонт. таймлайн по кварталам ===== */
+  .rm{margin-top:auto;margin-bottom:auto;position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:2cqw;padding-top:5cqw;}
+  .rm:before{content:"";position:absolute;left:1cqw;right:1cqw;top:5.9cqw;height:0.25cqw;background:var(--border);}
+  .rm__prog{content:"";position:absolute;left:1cqw;top:5.9cqw;height:0.25cqw;width:38%;background:var(--red);}
+  .rm__col{position:relative;}
+  .rm__dot{position:relative;z-index:2;width:2.6cqw;height:2.6cqw;border-radius:50%;background:#fff;border:0.45cqw solid var(--border-strong);display:flex;}
+  .rm__col.on .rm__dot{border-color:var(--red);background:var(--red);box-shadow:var(--sh-red);}
+  .rm__q{font:700 1.9cqw var(--sans);margin-top:1.9cqw;letter-spacing:-0.01em;}
+  .rm__col.on .rm__q{color:var(--red);}
+  .rm__tag{display:inline-block;font:600 1.15cqw var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:0.35cqw 0.9cqw;border-radius:99px;margin-top:0.9cqw;}
+  .rm__col.on .rm__tag{background:var(--red-50);color:var(--red-700);}
+  .rm__col:not(.on) .rm__tag{background:var(--bg-subtle);color:var(--faint);}
+  .rm__list{list-style:none;margin:1.3cqw 0 0;padding:0;display:flex;flex-direction:column;gap:0.8cqw;}
+  .rm__list li{font-size:1.5cqw;line-height:1.32;color:var(--muted);padding-left:1.6cqw;position:relative;}
+  .rm__list li:before{content:"";position:absolute;left:0;top:0.7cqw;width:0.6cqw;height:0.6cqw;border-radius:50%;background:var(--red);}
+
+  /* ===== R5 — Вертикальные вехи ===== */
+  .vm{margin-top:2cqw;flex:1;display:flex;flex-direction:column;justify-content:center;gap:0;position:relative;padding-left:1cqw;}
+  .vm:before{content:"";position:absolute;left:1.85cqw;top:1.6cqw;bottom:1.6cqw;width:0.25cqw;background:var(--border);}
+  .vm__r{display:grid;grid-template-columns:auto 1fr;gap:2.4cqw;align-items:flex-start;padding:0.85cqw 0;position:relative;}
+  .vm__dot{width:1.7cqw;height:1.7cqw;border-radius:50%;background:#fff;border:0.4cqw solid var(--border-strong);margin-top:0.5cqw;position:relative;z-index:2;}
+  .vm__r.on .vm__dot{border-color:var(--red);background:var(--red);box-shadow:var(--sh-red);}
+  .vm__body{display:grid;grid-template-columns:9cqw 1fr;gap:2.4cqw;align-items:baseline;}
+  .vm__w{font:800 1.85cqw var(--sans);color:var(--text);letter-spacing:-0.01em;}
+  .vm__r.on .vm__w{color:var(--red);}
+  .vm__h{font:700 1.85cqw var(--sans);letter-spacing:-0.01em;}
+  .vm__d{grid-column:2;font-size:1.45cqw;color:var(--muted);margin-top:0.35cqw;line-height:1.35;}
+
+  /* ===== R6 — Gantt-полосы ===== */
+  .gt{margin-top:2.4cqw;flex:1;display:flex;flex-direction:column;min-height:0;}
+  .gt__head{display:grid;grid-template-columns:14cqw repeat(4,1fr);margin-bottom:1.4cqw;}
+  .gt__head span{font:600 1.35cqw var(--mono);color:var(--faint);text-align:center;letter-spacing:.04em;}
+  .gt__head span:first-child{text-align:left;}
+  .gt__body{flex:1;display:flex;flex-direction:column;gap:1.3cqw;justify-content:center;position:relative;}
+  .gt__grid{position:absolute;inset:0;left:14cqw;display:grid;grid-template-columns:repeat(4,1fr);}
+  .gt__grid i{border-left:1px solid var(--border);}
+  .gt__row{display:grid;grid-template-columns:14cqw 1fr;align-items:center;gap:1.4cqw;position:relative;z-index:2;}
+  .gt__lab{font:700 1.55cqw var(--sans);}
+  .gt__lane{position:relative;height:2.4cqw;}
+  .gt__bar{position:absolute;top:0;bottom:0;border-radius:99px;display:flex;align-items:center;padding:0 1.4cqw;font:600 1.3cqw var(--sans);color:#fff;}
+  .gt__bar.red{background:linear-gradient(90deg,var(--red),var(--red-600));box-shadow:var(--sh-red);}
+  .gt__bar.dark{background:var(--text);}
+  .gt__bar.soft{background:var(--border-strong);color:var(--muted);}
+
+  /* ===== R7 — Сейчас / Скоро / Потом ===== */
+  .ph3{margin-top:2.6cqw;flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:2cqw;min-height:0;}
+  .ph3__c{border:1px solid var(--border);border-radius:1.5cqw;padding:2.6cqw 2.4cqw;display:flex;flex-direction:column;}
+  .ph3__c.now{background:var(--text);color:#fff;border-color:var(--text);box-shadow:var(--sh-md);}
+  .ph3__lab{font:600 1.3cqw var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:0.9cqw;}
+  .ph3__c.now .ph3__lab{color:#fff;}
+  .ph3__lab b{width:1.3cqw;height:1.3cqw;border-radius:50%;background:currentColor;display:inline-block;}
+  .ph3__h{font:800 2.4cqw var(--sans);letter-spacing:-0.01em;margin-top:1.2cqw;}
+  .ph3__list{list-style:none;margin:1.8cqw 0 0;padding:0;display:flex;flex-direction:column;gap:1.1cqw;}
+  .ph3__list li{font-size:1.55cqw;line-height:1.32;color:var(--muted);padding-left:1.8cqw;position:relative;}
+  .ph3__c.now .ph3__list li{color:rgba(255,255,255,.84);}
+  .ph3__list li:before{content:"";position:absolute;left:0;top:0.65cqw;width:0.7cqw;height:0.7cqw;border-radius:50%;background:var(--red);}
+
+  /* ===== T4 — Команда: сетка 3×2 с фото ===== */
+  .tg{margin-top:2.6cqw;flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:2cqw;min-height:0;}
+  .tm{display:flex;align-items:center;gap:1.6cqw;border:1px solid var(--border);border-radius:1.3cqw;padding:1.6cqw;}
+  .tm__av{width:6cqw;height:6cqw;border-radius:1.1cqw;flex:0 0 auto;}
+  .tm__nm{font:700 1.85cqw var(--sans);letter-spacing:-0.01em;}
+  .tm__rl{font-size:1.4cqw;color:var(--red);font-weight:600;margin-top:0.3cqw;}
+  .tm__bio{font-size:1.3cqw;color:var(--muted);margin-top:0.5cqw;line-height:1.35;}
+
+  /* ===== T5 — Лидер + команда ===== */
+  .ld{margin-top:2.6cqw;flex:1;display:grid;grid-template-columns:1.05fr 1.4fr;gap:3cqw;min-height:0;}
+  .ld__l{display:flex;flex-direction:column;justify-content:center;}
+  .ld__av{width:11cqw;height:11cqw;border-radius:1.6cqw;}
+  .ld__nm{font:800 2.8cqw var(--sans);letter-spacing:-0.02em;margin-top:1.6cqw;}
+  .ld__rl{font:600 1.6cqw var(--sans);color:var(--red);margin-top:0.4cqw;}
+  .ld__q{margin-top:1.4cqw;font-size:1.65cqw;line-height:1.45;color:var(--muted);max-width:92%;}
+  .ld__r{display:grid;grid-template-columns:1fr 1fr;gap:1.8cqw;align-content:center;}
+  .ld__m{display:flex;align-items:center;gap:1.3cqw;}
+  .ld__mav{width:5cqw;height:5cqw;border-radius:0.9cqw;flex:0 0 auto;}
+  .ld__mn{font:700 1.6cqw var(--sans);}
+  .ld__mr{font-size:1.35cqw;color:var(--muted);margin-top:0.2cqw;}
+
+  /* ===== T6 — Команда + цитата основателя ===== */
+  .fq{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1.15fr;}
+  .fq__l{background:linear-gradient(160deg,var(--ink-600),var(--bg-sunken));color:#fff;padding:6cqw 5cqw;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+  .fq__l:after{content:"";position:absolute;left:-6cqw;bottom:-6cqw;width:24cqw;height:24cqw;border-radius:50%;background:radial-gradient(circle,rgba(229,50,43,.34),transparent 68%);}
+  .fq__mark{font-family:Georgia,serif;font-size:9cqw;line-height:0.5;height:4cqw;color:var(--red);position:relative;}
+  .fq__q{font-weight:700;font-size:2.5cqw;line-height:1.36;position:relative;z-index:1;letter-spacing:-0.01em;}
+  .fq__by{margin-top:2.4cqw;display:flex;align-items:center;gap:1.4cqw;position:relative;z-index:1;}
+  .fq__av{width:5cqw;height:5cqw;border-radius:1cqw;}
+  .fq__nm{font:700 1.8cqw var(--sans);}
+  .fq__rl{font-size:1.4cqw;color:rgba(255,255,255,.66);margin-top:0.2cqw;}
+  .fq__r{padding:6cqw 5cqw;display:flex;flex-direction:column;justify-content:center;}
+  .fq__rt{font:600 1.35cqw var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);}
+  .fq__grid{margin-top:2cqw;display:grid;grid-template-columns:1fr 1fr;gap:1.8cqw;}
+  .fq__m{display:flex;align-items:center;gap:1.3cqw;border:1px solid var(--border);border-radius:1.1cqw;padding:1.4cqw;}
+  .fq__mav{width:4.4cqw;height:4.4cqw;border-radius:0.8cqw;flex:0 0 auto;}
+  .fq__mn{font:700 1.55cqw var(--sans);}
+  .fq__mr{font-size:1.3cqw;color:var(--red);font-weight:600;margin-top:0.2cqw;}
+
+  /* ===== T7 — Команда + доверие в цифрах ===== */
+  .tt{margin-top:2.6cqw;flex:1;display:flex;flex-direction:column;gap:2.4cqw;min-height:0;}
+  .tt__row{display:grid;grid-template-columns:repeat(4,1fr);gap:2cqw;}
+  .tt__m{text-align:center;}
+  .tt__av{width:7cqw;height:7cqw;border-radius:50%;margin:0 auto;}
+  .tt__nm{font:700 1.7cqw var(--sans);margin-top:1.1cqw;}
+  .tt__rl{font-size:1.35cqw;color:var(--muted);margin-top:0.3cqw;}
+  .tt__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2cqw;padding-top:2.2cqw;border-top:1px solid var(--border);}
+  .tt__s{text-align:center;}
+  .tt__sv{font:800 3.4cqw var(--sans);color:var(--red);letter-spacing:-0.03em;line-height:1;}
+  .tt__sl{font-size:1.4cqw;color:var(--muted);margin-top:0.5cqw;}
+
+  /* ===== P4 — Процесс: горизонт. шаги со стрелками ===== */
+  .pa{margin-top:2.6cqw;flex:1;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;align-items:stretch;gap:0;min-height:0;}
+  .pa__s{border:1px solid var(--border);border-radius:1.4cqw;padding:2.4cqw 2cqw;display:flex;flex-direction:column;position:relative;margin-right:2.6cqw;}
+  .pa__s:last-child{margin-right:0;}
+  .pa__s:not(:last-child):after{content:"";position:absolute;right:-2.6cqw;top:50%;width:2.6cqw;height:0.25cqw;background:var(--border-strong);}
+  .pa__s:not(:last-child):before{content:"";position:absolute;right:-1.1cqw;top:50%;transform:translateY(-50%) rotate(45deg);width:1cqw;height:1cqw;border-top:0.25cqw solid var(--border-strong);border-right:0.25cqw solid var(--border-strong);z-index:2;}
+  .pa__n{width:3.4cqw;height:3.4cqw;border-radius:0.9cqw;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font:800 1.8cqw var(--sans);box-shadow:var(--sh-red);}
+  .pa__h{font:700 1.95cqw var(--sans);margin-top:1.6cqw;letter-spacing:-0.01em;}
+  .pa__d{font-size:1.45cqw;color:var(--muted);margin-top:0.8cqw;line-height:1.4;}
+
+  /* ===== P5 — Круговой цикл ===== */
+  .cy{margin-top:2.4cqw;flex:1;display:grid;grid-template-columns:0.9fr 1.1fr;gap:3cqw;align-items:center;min-height:0;}
+  .cy__ring{position:relative;width:78%;aspect-ratio:1;max-height:38cqw;margin:0 auto;}
+  .cy__center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40%;height:40%;border-radius:50%;background:var(--text);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+  .cy__ct{font:800 2.2cqw var(--sans);letter-spacing:-0.01em;}
+  .cy__cs{font:500 1.2cqw var(--mono);color:rgba(255,255,255,.6);margin-top:0.3cqw;}
+  .cy__node{position:absolute;width:5.4cqw;height:5.4cqw;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font:800 2cqw var(--sans);box-shadow:var(--sh-red);transform:translate(-50%,-50%);}
+  .cy__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.6cqw;}
+  .cy__li{display:flex;gap:1.4cqw;align-items:flex-start;}
+  .cy__bn{width:2.8cqw;height:2.8cqw;border-radius:0.7cqw;background:var(--red-50);color:var(--red-700);display:flex;align-items:center;justify-content:center;font:800 1.5cqw var(--sans);flex:0 0 auto;}
+  .cy__bh{font:700 1.8cqw var(--sans);}
+  .cy__bd{font-size:1.45cqw;color:var(--muted);margin-top:0.3cqw;line-height:1.35;}
+
+  /* ===== P6 — Шаги + ответственный ===== */
+  .po{margin-top:2.4cqw;flex:1;display:flex;flex-direction:column;border-top:1px solid var(--border);min-height:0;}
+  .po__r{flex:1;display:grid;grid-template-columns:4cqw 1fr 16cqw;gap:2.4cqw;align-items:center;padding:1.5cqw 0.4cqw;border-bottom:1px solid var(--border);}
+  .po__n{width:3.4cqw;height:3.4cqw;border-radius:50%;border:0.3cqw solid var(--red);color:var(--red);display:flex;align-items:center;justify-content:center;font:800 1.6cqw var(--sans);}
+  .po__h{font:700 1.95cqw var(--sans);letter-spacing:-0.01em;}
+  .po__d{font-size:1.45cqw;color:var(--muted);margin-top:0.3cqw;}
+  .po__own{display:flex;align-items:center;gap:1cqw;}
+  .po__av{width:3cqw;height:3cqw;border-radius:50%;flex:0 0 auto;}
+  .po__on{font:600 1.45cqw var(--sans);}
+  .po__or{font-size:1.2cqw;color:var(--muted);margin-top:0.1cqw;}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top__in">
+    <div class="brand"><span class="brand__mk"><span></span><span></span></span> Presa</div>
+    <span class="pill">Спринт 3 · Дорожная карта · Команда · Процесс</span>
+  </div>
+</div>
+<p class="note"><b>11 новых раскладок</b> — закрываем структурные категории (roadmap: было 3, team: было 3, process: было 4). Та же система red/white. Каждый кадр подписан будущим <b>id</b> и архетипом. Что одобрите — завожу во все три слоя (схема полей → экранная вёрстка → PPTX-рендер).</p>
+
+<div class="stack" id="stack"></div>
+
+<script>
+  const foot = (n)=>`<div class="foot"><span class="foot__wm"><b></b>Presa</span><span class="foot__pg">${n}</span></div>`;
+  const head = (eye,title,sub)=>`<div class="eyebrow"><i></i>${eye}</div><h2 class="s-title">${title}</h2>${sub?`<p class="s-sub">${sub}</p>`:''}`;
+  const av = (i,grad)=>`<div class="ph" style="border-radius:inherit"><div class="grid"></div><div class="glow" style="background:radial-gradient(60% 60% at ${grad} 30%,rgba(229,50,43,.42),transparent 66%)"></div><div class="ini">${i}</div></div>`;
+
+  const SLIDES = [
+    {grp:'ДОРОЖНАЯ КАРТА',cnt:'было 3 → станет 7',items:[
+      {id:'roadmap-04',t:'Таймлайн по кварталам',tpl:'roadmap_quarters · горизонт. вехи',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Roadmap','Куда движется продукт','План развития Presa на ближайший год.')}
+          <div class="rm"><div class="rm__prog"></div>
+            ${[['on','Q1','Запущено',['Конструктор слайдов','Экспорт в PPTX']],
+               ['on','Q2','Сейчас',['Библиотека 120+ шаблонов','Брендинг и шрифты']],
+               ['','Q3','Скоро',['AI-помощник по тексту','Совместная работа']],
+               ['','Q4','Планы',['Интеграции и API','Аналитика просмотров']]]
+              .map(c=>`<div class="rm__col ${c[0]}">
+                <div class="rm__dot"></div>
+                <div class="rm__q">${c[1]}</div>
+                <span class="rm__tag">${c[2]}</span>
+                <ul class="rm__list">${c[3].map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}
+          </div>
+          ${foot('Roadmap · 21')}
+        </div></section>`},
+      {id:'roadmap-05',t:'Вертикальные вехи',tpl:'roadmap_milestones · список вех',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Roadmap','Этапы развития','')}
+          <div class="vm">
+            ${[['on','2024','Запуск','Конструктор и базовая библиотека шаблонов'],
+               ['on','2025','Рост','AI-генерация, брендинг и командная работа'],
+               ['','2026','Масштаб','Интеграции, API и аналитика просмотров'],
+               ['','2027','Платформа','Маркетплейс шаблонов и партнёрская сеть']]
+              .map(r=>`<div class="vm__r ${r[0]}">
+                <div class="vm__dot"></div>
+                <div class="vm__body"><div class="vm__w">${r[1]}</div><div class="vm__h">${r[2]}</div><div class="vm__d">${r[3]}</div></div></div>`).join('')}
+          </div>
+          ${foot('Roadmap · 22')}
+        </div></section>`},
+      {id:'roadmap-06',t:'Gantt-полосы',tpl:'roadmap_gantt · полосы по кварталам',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Roadmap','План работ по кварталам','')}
+          <div class="gt">
+            <div class="gt__head"><span>Направление</span><span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span></div>
+            <div class="gt__body">
+              <div class="gt__grid"><i></i><i></i><i></i><i></i></div>
+              ${[['Библиотека шаблонов','red','0%','50%','Готово'],
+                 ['AI-помощник','dark','25%','45%','В работе'],
+                 ['Командная работа','red','50%','30%','Релиз Q3'],
+                 ['Интеграции и API','soft','75%','25%','Q4']]
+                .map(r=>`<div class="gt__row">
+                  <div class="gt__lab">${r[0]}</div>
+                  <div class="gt__lane"><div class="gt__bar ${r[1]}" style="left:${r[2]};width:${r[3]}">${r[4]}</div></div></div>`).join('')}
+            </div>
+          </div>
+          ${foot('Roadmap · 23')}
+        </div></section>`},
+      {id:'roadmap-07',t:'Сейчас / Скоро / Потом',tpl:'roadmap_phases · 3 горизонта',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Roadmap','Три горизонта развития','')}
+          <div class="ph3">
+            <div class="ph3__c now">
+              <div class="ph3__lab"><b></b>Сейчас</div>
+              <div class="ph3__h">В продукте</div>
+              <ul class="ph3__list"><li>Конструктор слайдов</li><li>120+ шаблонов</li><li>Экспорт в PPTX</li><li>Брендинг и шрифты</li></ul>
+            </div>
+            <div class="ph3__c">
+              <div class="ph3__lab"><b></b>Скоро</div>
+              <div class="ph3__h">Q3–Q4</div>
+              <ul class="ph3__list"><li>AI-помощник по тексту</li><li>Совместная работа</li><li>Комментарии и роли</li></ul>
+            </div>
+            <div class="ph3__c">
+              <div class="ph3__lab"><b></b>Потом</div>
+              <div class="ph3__h">2027</div>
+              <ul class="ph3__list"><li>Интеграции и API</li><li>Аналитика просмотров</li><li>Маркетплейс шаблонов</li></ul>
+            </div>
+          </div>
+          ${foot('Roadmap · 24')}
+        </div></section>`}
+    ]},
+    {grp:'КОМАНДА',cnt:'было 3 → станет 7',items:[
+      {id:'team-04',t:'Сетка 3×2 с фото',tpl:'team_grid_6 · фото + роль + био',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Team','Кто за этим стоит','Команда продукта, дизайна и продаж.')}
+          <div class="tg">
+            ${[['ИП','Иван Петров','CEO · стратегия','10 лет в B2B-SaaS','20%'],
+               ['АК','Анна Котова','Product','Ведёт развитие продукта','80%'],
+               ['ДЛ','Дмитрий Лис','Design','Дизайн-система и шаблоны','40%'],
+               ['ЕС','Елена Сорокина','Sales','Корпоративные клиенты','70%'],
+               ['МР','Максим Рожков','Engineering','Конструктор и экспорт','30%'],
+               ['ОВ','Ольга Власова','Customer','Внедрение и поддержка','60%']]
+              .map(m=>`<div class="tm">
+                <div class="tm__av">${av(m[0],m[4])}</div>
+                <div><div class="tm__nm">${m[1]}</div><div class="tm__rl">${m[2]}</div><div class="tm__bio">${m[3]}</div></div></div>`).join('')}
+          </div>
+          ${foot('Team · 31')}
+        </div></section>`},
+      {id:'team-05',t:'Лидер + команда',tpl:'team_lead · флагман + сетка',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Team','Команда основателей','')}
+          <div class="ld">
+            <div class="ld__l">
+              <div class="ld__av">${av('ИП','30%')}</div>
+              <div class="ld__nm">Иван Петров</div>
+              <div class="ld__rl">Сооснователь и CEO</div>
+              <div class="ld__q">«Мы делаем так, чтобы любая команда собирала презентации уровня агентства — за минуты, а не за дни.»</div>
+            </div>
+            <div class="ld__r">
+              ${[['АК','Анна Котова','Product Lead','75%'],['ДЛ','Дмитрий Лис','Head of Design','35%'],['МР','Максим Рожков','CTO','55%'],['ЕС','Елена Сорокина','Head of Sales','25%']]
+                .map(m=>`<div class="ld__m">
+                  <div class="ld__mav">${av(m[0],m[3])}</div>
+                  <div><div class="ld__mn">${m[1]}</div><div class="ld__mr">${m[2]}</div></div></div>`).join('')}
+            </div>
+          </div>
+          ${foot('Team · 32')}
+        </div></section>`},
+      {id:'team-06',t:'Команда + цитата основателя',tpl:'team_quote_split · тёмный сплит',html:`
+        <section class="slide"><div class="accent"></div>
+          <div class="fq">
+            <div class="fq__l">
+              <div class="fq__mark">&ldquo;</div>
+              <blockquote class="fq__q">Хорошая презентация не должна быть привилегией тех, у кого есть дизайнер.</blockquote>
+              <div class="fq__by"><div class="fq__av">${av('ИП','40%')}</div><div><div class="fq__nm">Иван Петров</div><div class="fq__rl">Сооснователь, CEO</div></div></div>
+            </div>
+            <div class="fq__r">
+              <div class="fq__rt">Команда</div>
+              <div class="fq__grid">
+                ${[['АК','Анна Котова','Product'],['ДЛ','Дмитрий Лис','Design'],['МР','Максим Рожков','Engineering'],['ЕС','Елена Сорокина','Sales']]
+                  .map(m=>`<div class="fq__m"><div class="fq__mav">${av(m[0],'50%')}</div><div><div class="fq__mn">${m[1]}</div><div class="fq__mr">${m[2]}</div></div></div>`).join('')}
+              </div>
+            </div>
+          </div>
+          ${foot('Team · 33')}
+        </section>`},
+      {id:'team-07',t:'Команда + доверие в цифрах',tpl:'team_trust · сетка + KPI-полоса',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Team','Команда, которой доверяют','')}
+          <div class="tt">
+            <div class="tt__row">
+              ${[['ИП','Иван Петров','CEO','20%'],['АК','Анна Котова','Product','45%'],['ДЛ','Дмитрий Лис','Design','65%'],['МР','Максим Рожков','CTO','85%']]
+                .map(m=>`<div class="tt__m"><div class="tt__av">${av(m[0],m[3])}</div><div class="tt__nm">${m[1]}</div><div class="tt__rl">${m[2]}</div></div>`).join('')}
+            </div>
+            <div class="tt__stats">
+              <div class="tt__s"><div class="tt__sv">12 лет</div><div class="tt__sl">средний опыт в B2B</div></div>
+              <div class="tt__s"><div class="tt__sv">500+</div><div class="tt__sl">клиентов на платформе</div></div>
+              <div class="tt__s"><div class="tt__sv">4,9</div><div class="tt__sl">оценка поддержки</div></div>
+            </div>
+          </div>
+          ${foot('Team · 34')}
+        </div></section>`}
+    ]},
+    {grp:'ПРОЦЕСС',cnt:'было 4 → станет 7',items:[
+      {id:'process-04',t:'Горизонтальные шаги со стрелками',tpl:'process_arrows · 4 шага',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Process','Как мы работаем','От первого брифа до готовой презентации.')}
+          <div class="pa">
+            ${[['1','Бриф','Согласуем цель, аудиторию и ключевые сообщения'],
+               ['2','Структура','Собираем сценарий и подбираем шаблоны'],
+               ['3','Сборка','Наполняем слайды контентом в фирменном стиле'],
+               ['4','Готово','Выгружаем в PPTX и передаём с правками']]
+              .map(s=>`<div class="pa__s"><div class="pa__n">${s[0]}</div><div class="pa__h">${s[1]}</div><div class="pa__d">${s[2]}</div></div>`).join('')}
+          </div>
+          ${foot('Process · 41')}
+        </div></section>`},
+      {id:'process-05',t:'Круговой цикл',tpl:'process_cycle · кольцо + список',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Process','Цикл непрерывного улучшения','')}
+          <div class="cy">
+            <div class="cy__ring">
+              <div class="cy__center"><div class="cy__ct">Presa</div><div class="cy__cs">loop</div></div>
+              <div class="cy__node" style="left:50%;top:0%">1</div>
+              <div class="cy__node" style="left:100%;top:50%">2</div>
+              <div class="cy__node" style="left:50%;top:100%">3</div>
+              <div class="cy__node" style="left:0%;top:50%">4</div>
+            </div>
+            <ul class="cy__list">
+              <li class="cy__li"><div class="cy__bn">1</div><div><div class="cy__bh">Собрать</div><div class="cy__bd">Готовим презентацию из шаблонов за минуты</div></div></li>
+              <li class="cy__li"><div class="cy__bn">2</div><div><div class="cy__bh">Показать</div><div class="cy__bd">Делимся ссылкой или выгружаем в PPTX</div></div></li>
+              <li class="cy__li"><div class="cy__bn">3</div><div><div class="cy__bh">Измерить</div><div class="cy__bd">Смотрим, какие слайды работают лучше</div></div></li>
+              <li class="cy__li"><div class="cy__bn">4</div><div><div class="cy__bh">Улучшить</div><div class="cy__bd">Обновляем шаблоны и повторяем цикл</div></div></li>
+            </ul>
+          </div>
+          ${foot('Process · 42')}
+        </div></section>`},
+      {id:'process-06',t:'Шаги + ответственный',tpl:'process_owners · этап + владелец',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Process','Этапы и ответственные','Прозрачно: кто ведёт каждый шаг проекта.')}
+          <div class="po">
+            ${[['1','Бриф и цели','Собираем требования и аудиторию','ЕС','Елена С.','Account'],
+               ['2','Контент','Готовим структуру и тексты','АК','Анна К.','Product'],
+               ['3','Дизайн','Собираем слайды в фирменном стиле','ДЛ','Дмитрий Л.','Design'],
+               ['4','Сдача','Выгрузка, правки и передача','ОВ','Ольга В.','Customer']]
+              .map(r=>`<div class="po__r">
+                <div class="po__n">${r[0]}</div>
+                <div><div class="po__h">${r[1]}</div><div class="po__d">${r[2]}</div></div>
+                <div class="po__own"><div class="po__av">${av(r[3],'50%')}</div><div><div class="po__on">${r[4]}</div><div class="po__or">${r[5]}</div></div></div></div>`).join('')}
+          </div>
+          ${foot('Process · 43')}
+        </div></section>`}
+    ]}
+  ];
+
+  const stack = document.getElementById('stack');
+  stack.innerHTML = SLIDES.map(g=>`
+    <div class="group"><span class="group__n">${g.grp}</span><span class="group__l"></span><span class="group__c">${g.cnt}</span></div>
+    ${g.items.map(s=>`
+      <div class="frame">
+        <div class="frame__bar"><span class="frame__id">${s.id}</span><span class="frame__t">${s.t}</span><span class="frame__tpl">${s.tpl}</span></div>
+        <div class="card">${s.html}</div>
+      </div>`).join('')}
+  `).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rl \"constructor.jsx\" . --include=*.html)",
+      "Bash(grep -rl \"generator.jsx\" . --include=*.html)",
+      "Bash(node --check templates.js)",
+      "Bash(node --check slide-layouts.jsx)",
+      "Bash(cp slide-layouts.jsx C:/Users/Satbay.T/AppData/Local/Temp/claude/D---------------------------Presa-IO--6-/8ee90ec4-8369-4264-be4f-5faba18807eb/scratchpad/sl.js)",
+      "Bash(node --check C:/Users/Satbay.T/AppData/Local/Temp/claude/D---------------------------Presa-IO--6-/8ee90ec4-8369-4264-be4f-5faba18807eb/scratchpad/sl.js)",
+      "Bash(cat)",
+      "Bash(node C:/Users/Satbay.T/AppData/Local/Temp/claude/D---------------------------Presa-IO--6-/8ee90ec4-8369-4264-be4f-5faba18807eb/scratchpad/probe.js)",
+      "Bash(node run.js)",
+      "Bash(cp 'D:/Системные файлы/Загрузки/Presa IO \\(6\\)/assets/cx-wizard-steps.jsx' C:/Users/Satbay.T/AppData/Local/Temp/claude/D---------------------------Presa-IO--6-/8ee90ec4-8369-4264-be4f-5faba18807eb/scratchpad/cx-wizard-steps.jsx.js)",
+      "Bash(node --check cx-wizard-steps.jsx.js)",
+      "Bash(node scm.js)",
+      "Bash(node scm2.js)",
+      "Bash(cp 'D:/Системные файлы/Загрузки/Presa IO \\(6\\)/assets/cx-ui.jsx' C:/Users/Satbay.T/AppData/Local/Temp/claude/D---------------------------Presa-IO--6-/8ee90ec4-8369-4264-be4f-5faba18807eb/scratchpad/cxui.js)",
+      "Bash(node --check cxui.js)",
+      "Bash(node runfull.js)",
+      "Bash(node multi.js)",
+      "Bash(node deck.js)",
+      "Bash(node dbg.js)",
+      "Bash(node dbg2.js)",
+      "Bash(node -e ' *)"
+    ]
+  }
+}

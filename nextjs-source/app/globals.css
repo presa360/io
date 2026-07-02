@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --red: #E5322B;
+  --red-600: #CC241E;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  color: #0E1116;
+  background: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--red); color: #fff; }
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-semibold text-[15px] rounded-[9px] px-5 py-3 transition;
+  }
+  .btn-primary { @apply text-white shadow-red; background: var(--red); }
+  .btn-primary:hover { background: var(--red-600); }
+  .btn-ghost { @apply text-ink border border-[#DADDE3] hover:bg-subtle; }
+  .eyebrow {
+    @apply font-mono text-xs font-medium tracking-[0.1em] uppercase inline-flex items-center gap-2;
+    color: var(--red);
+  }
+  .eyebrow::before { content: ""; @apply inline-block w-4 h-[1.5px]; background: var(--red); }
+}

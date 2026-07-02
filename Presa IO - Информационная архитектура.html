@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presa IO — Информационная архитектура</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --sans: 'Manrope', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --ink: #14181C; --muted: #5A646F; --faint: #939BA6;
+    --line: #E4E7EB; --line-soft: #EEF0F3;
+    --bg: #ECEEF1; --surface: #FFFFFF; --panel: #F6F7F9;
+    --red: #E5322B; --red-soft: #FCEAE8;
+    --graphite: #15181C; --amber: #E08A1E;
+    --blue: #2A6FDB; --green: #1F8A5B; --violet: #6B4DD6;
+    --r: 16px; --r-sm: 10px;
+    --shadow: 0 10px 34px rgba(20,24,28,.07);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 30px 100px; }
+
+  /* ---- header ---- */
+  .top { background: var(--graphite); color: #fff; position: relative; overflow: hidden; }
+  .top::after { content: ""; position: absolute; inset: 0; opacity: .5; background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 46px 46px; }
+  .top__in { max-width: 1180px; margin: 0 auto; padding: 40px 30px 44px; position: relative; z-index: 1; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 17px; letter-spacing: -0.01em; }
+  .brand__mk { width: 30px; height: 30px; border-radius: 8px; background: var(--red); display: flex; align-items: center; justify-content: center; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--red); margin: 26px 0 0; }
+  .top h1 { font-size: 40px; line-height: 1.05; letter-spacing: -0.03em; font-weight: 800; margin: 12px 0 0; max-width: 760px; }
+  .top p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,.72); margin: 16px 0 0; max-width: 680px; }
+  .top__meta { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 26px; }
+  .top__meta div { display: flex; flex-direction: column; gap: 4px; white-space: nowrap; }
+  .top__meta b { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+  .top__meta span { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.55); letter-spacing: .04em; }
+
+  /* ---- section ---- */
+  section { margin-top: 52px; }
+  .shead { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
+  .snum { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 11px; background: var(--graphite); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 16px; }
+  .shead h2 { font-size: 24px; letter-spacing: -0.02em; margin: 4px 0 0; }
+  .shead p { font-size: 14px; line-height: 1.5; color: var(--muted); margin: 5px 0 0; max-width: 720px; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); }
+  .grid { display: grid; gap: 16px; }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g2 { grid-template-columns: repeat(2, 1fr); }
+
+  /* freq columns */
+  .freq { padding: 20px 22px; }
+  .freq__h { display: flex; align-items: center; gap: 10px; padding-bottom: 13px; border-bottom: 1px solid var(--line-soft); margin-bottom: 13px; }
+  .freq__dot { width: 11px; height: 11px; border-radius: 50%; flex: 0 0 auto; }
+  .freq__t { font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
+  .freq__tag { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--faint); letter-spacing: .04em; }
+  .freq ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+  .freq li { display: flex; gap: 9px; font-size: 13.5px; line-height: 1.4; color: #2C333B; }
+  .freq li::before { content: ""; flex: 0 0 auto; width: 6px; height: 6px; border-radius: 2px; background: var(--line); margin-top: 6px; }
+  .freq li b { font-weight: 600; }
+
+  /* nav tree */
+  .tree { padding: 24px; }
+  .tree__row { display: flex; gap: 14px; align-items: stretch; flex-wrap: wrap; }
+  .l1 { flex: 1 1 200px; min-width: 200px; border: 1.5px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
+  .l1__h { background: var(--panel); padding: 12px 14px; display: flex; align-items: center; gap: 9px; border-bottom: 1px solid var(--line); }
+  .l1__h b { font-size: 14.5px; font-weight: 700; }
+  .l1__h .mono { font-family: var(--mono); font-size: 10px; color: var(--faint); margin-left: auto; }
+  .l1__body { padding: 11px 12px; display: flex; flex-direction: column; gap: 7px; }
+  .l2 { font-size: 13px; color: #2C333B; padding: 7px 10px; border-radius: 7px; background: var(--panel); display: flex; align-items: center; gap: 8px; }
+  .l2 small { font-family: var(--mono); font-size: 10px; color: var(--faint); margin-left: auto; }
+  .l3 { font-size: 12px; color: var(--muted); padding-left: 18px; display: flex; gap: 7px; }
+  .l3::before { content: "└"; color: var(--faint); font-family: var(--mono); }
+
+  /* flows */
+  .flow { padding: 20px 22px; }
+  .flow + .flow { border-top: 1px solid var(--line-soft); }
+  .flow__head { display: flex; align-items: center; gap: 11px; margin-bottom: 15px; }
+  .flow__badge { font-family: var(--mono); font-size: 11px; font-weight: 700; color: #fff; background: var(--red); padding: 4px 9px; border-radius: 6px; letter-spacing: .05em; }
+  .flow__name { font-weight: 700; font-size: 15.5px; letter-spacing: -0.01em; }
+  .flow__goal { margin-left: auto; font-size: 12px; color: var(--muted); }
+  .flow__goal b { color: var(--green); font-weight: 700; }
+  .steps { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; }
+  .step { display: flex; align-items: center; gap: 10px; }
+  .step__box { background: var(--panel); border: 1px solid var(--line); border-radius: 9px; padding: 9px 13px; display: flex; align-items: center; gap: 9px; }
+  .step__n { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--red); }
+  .step__l { font-size: 13px; font-weight: 600; }
+  .step__arrow { color: var(--faint); padding: 0 9px; flex: 0 0 auto; }
+  .step--goal .step__box { background: #EAF7F0; border-color: #BFE6D2; }
+  .step--goal .step__n { color: var(--green); }
+
+  /* friction */
+  .fric { padding: 18px 20px; display: flex; gap: 15px; }
+  .fric__rank { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 11px; background: var(--red-soft); color: var(--red); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; }
+  .fric__t { font-weight: 700; font-size: 15px; margin: 1px 0 0; letter-spacing: -0.01em; }
+  .fric__where { font-family: var(--mono); font-size: 11px; color: var(--faint); margin: 3px 0 8px; letter-spacing: .03em; }
+  .fric__why { font-size: 13px; line-height: 1.5; color: var(--muted); }
+  .fric__why b { color: #2C333B; font-weight: 600; }
+  .fric__fix { font-size: 12.5px; line-height: 1.45; color: var(--green); margin-top: 7px; display: flex; gap: 7px; }
+  .fric__fix::before { content: "→"; font-weight: 700; }
+
+  /* taxonomy chips */
+  .tax { padding: 22px; }
+  .tax__block + .tax__block { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line-soft); }
+  .tax__lbl { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 11px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-size: 13px; font-weight: 600; padding: 7px 13px; border-radius: 99px; background: var(--panel); border: 1px solid var(--line); }
+  .chip--cat { background: #fff; }
+  .chip--filter { background: var(--red-soft); border-color: #F3CFCB; color: #B5251F; }
+  .chip--label { background: var(--graphite); color: #fff; border-color: var(--graphite); font-family: var(--mono); font-size: 11.5px; font-weight: 500; }
+
+  /* screen map */
+  .smap { padding: 22px; display: grid; gap: 13px; grid-template-columns: repeat(2, 1fr); }
+  .screen { border: 1px solid var(--line); border-radius: var(--r-sm); padding: 14px 16px; background: #fff; }
+  .screen__top { display: flex; align-items: center; gap: 9px; margin-bottom: 6px; }
+  .screen__tag { font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 5px; letter-spacing: .04em; }
+  .screen__name { font-weight: 700; font-size: 14.5px; letter-spacing: -0.01em; }
+  .screen__fn { font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+  .screen__link { font-size: 11.5px; color: var(--faint); margin-top: 7px; display: flex; gap: 6px; align-items: baseline; }
+  .screen__link b { color: var(--red); font-weight: 600; font-family: var(--mono); font-size: 10.5px; }
+  .tag-entry { background: #EAF1FC; color: var(--blue); }
+  .tag-flow { background: #FBEEDD; color: #B5701A; }
+  .tag-edit { background: var(--red-soft); color: var(--red); }
+  .tag-manage { background: #EEEAFB; color: var(--violet); }
+
+  /* priority */
+  .prio { padding: 22px; }
+  .prio__row { display: flex; gap: 14px; align-items: stretch; padding: 14px 0; }
+  .prio__row + .prio__row { border-top: 1px solid var(--line-soft); }
+  .prio__p { flex: 0 0 auto; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 16px; color: #fff; }
+  .p0 { background: var(--red); } .p1 { background: var(--amber); } .p2 { background: var(--blue); } .p3 { background: var(--faint); }
+  .prio__body { flex: 1; }
+  .prio__t { font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
+  .prio__why { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  .prio__meta { display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
+  .prio__meta span { font-family: var(--mono); font-size: 11px; color: var(--faint); display: flex; align-items: center; gap: 5px; }
+  .prio__meta b { color: #2C333B; }
+  .bar { display: inline-block; width: 54px; height: 6px; border-radius: 3px; background: var(--line); position: relative; overflow: hidden; vertical-align: middle; }
+  .bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+
+  .note { margin-top: 14px; font-size: 12.5px; color: var(--faint); display: flex; gap: 8px; line-height: 1.5; }
+  .note::before { content: "●"; color: var(--red); font-size: 8px; margin-top: 4px; }
+  @media (max-width: 880px) { .g3, .g2, .smap { grid-template-columns: 1fr; } .top h1 { font-size: 30px; } }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top__in">
+    <div class="brand"><span class="brand__mk"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="2.6" rx="1.3" fill="#fff"/><rect x="5" y="10.7" width="14" height="2.6" rx="1.3" fill="#fff" opacity=".6"/><rect x="5" y="15.4" width="8.5" height="2.6" rx="1.3" fill="#fff" opacity=".4"/></svg></span> Presa IO</div>
+    <div class="eyebrow">Информационная архитектура · до отрисовки экранов</div>
+    <h1>Архитектура продукта Presa IO</h1>
+    <p>Полная IA до Figma: что пользователь должен найти, сделать и понять, как это устроено в навигации, какими путями он идёт к цели и что проектировать первым. Привязано к реальным экранам и словарю продукта.</p>
+    <div class="top__meta">
+      <div><b>7 блоков</b><span>СТРУКТУРА</span></div>
+      <div><b>5 потоков</b><span>КРИТИЧНЫЕ ПУТИ</span></div>
+      <div><b>11 экранов</b><span>КАРТА</span></div>
+      <div><b>4 уровня</b><span>ПРИОРИТЕТЫ P0–P3</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. CONTENT INVENTORY -->
+  <section>
+    <div class="shead">
+      <span class="snum">01</span>
+      <div><h2>Инвентарь контента</h2><p>Всё, что пользователь должен найти, сделать или понять — сгруппировано по частоте использования. Частота определяет, что должно быть в один клик, а что можно спрятать глубже.</p></div>
+    </div>
+    <div class="grid g3">
+      <div class="card freq">
+        <div class="freq__h"><span class="freq__dot" style="background:var(--red)"></span><span class="freq__t">Каждую сессию</span><span class="freq__tag">CORE</span></div>
+        <ul>
+          <li><b>Создать презентацию</b> — из текста или с нуля</li>
+          <li><b>Вставить / импортировать текст</b> в Prompt Manager</li>
+          <li><b>Подтвердить структуру</b> — сколько слайдов и какие</li>
+          <li><b>Редактировать текст</b> слайда прямо на холсте</li>
+          <li><b>Сменить вариант дизайна</b> слайда</li>
+          <li><b>Добавить слайд</b> из библиотеки</li>
+          <li><b>Предпросмотр</b> презентации</li>
+          <li><b>Скачать</b> — PPTX / PDF</li>
+        </ul>
+      </div>
+      <div class="card freq">
+        <div class="freq__h"><span class="freq__dot" style="background:var(--amber)"></span><span class="freq__t">Регулярно</span><span class="freq__tag">SUPPORT</span></div>
+        <ul>
+          <li><b>Выбрать стиль</b> презентации</li>
+          <li><b>Выбрать шаблон</b> слайда по категории</li>
+          <li><b>Переставить / удалить</b> слайды</li>
+          <li><b>Заменить фото</b> в фото-слоте</li>
+          <li><b>Выбрать иконку</b> (поиск по библиотеке)</li>
+          <li><b>Переименовать</b> презентацию</li>
+          <li><b>Отменить / повторить</b> действие</li>
+          <li><b>AI-сборка одного слайда</b> из текста</li>
+        </ul>
+      </div>
+      <div class="card freq">
+        <div class="freq__h"><span class="freq__dot" style="background:var(--faint)"></span><span class="freq__t">Изредка / разово</span><span class="freq__tag">SETUP</span></div>
+        <ul>
+          <li><b>Настроить бренд</b> — логотип, акцент, название</li>
+          <li><b>Скачать фирменные шрифты</b> (для PPTX)</li>
+          <li><b>Открыть сохранённую</b> презентацию</li>
+          <li><b>Сменить тему / палитру</b></li>
+          <li><b>Понять, как продукт работает</b> (лендинг)</li>
+          <li><b>Настройки</b> аккаунта</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">Принцип: «Core» — всегда в один клик и в основной рабочей зоне; «Support» — в панелях и контекстных меню; «Setup» — за вторичным входом, не мешает основному потоку.</div>
+  </section>
+
+  <!-- 2. NAV HIERARCHY -->
+  <section>
+    <div class="shead">
+      <span class="snum">02</span>
+      <div><h2>Иерархия навигации</h2><p>Максимум 2–3 уровня. Названия — на языке пользователя («Скачать», а не «Экспорт-пайплайн»; «Мои презентации», а не «Дашборд проектов»).</p></div>
+    </div>
+    <div class="card tree">
+      <div class="tree__row">
+        <div class="l1">
+          <div class="l1__h"><b>Главная</b><span class="mono">L1</span></div>
+          <div class="l1__body">
+            <div class="l2">Создать презентацию <small>CTA</small></div>
+            <div class="l2">Мои презентации</div>
+            <div class="l2">Как это работает</div>
+          </div>
+        </div>
+        <div class="l1">
+          <div class="l1__h"><b>Создание</b><span class="mono">FLOW</span></div>
+          <div class="l1__body">
+            <div class="l2">Выбрать стиль</div>
+            <div class="l3">3 стиля + Чистый лист</div>
+            <div class="l2">Вставить текст</div>
+            <div class="l3">Режим: весь текст / сжать</div>
+            <div class="l2">Структура → правки</div>
+          </div>
+        </div>
+        <div class="l1">
+          <div class="l1__h"><b>Редактор</b><span class="mono">L1</span></div>
+          <div class="l1__body">
+            <div class="l2">Слайды <small>список</small></div>
+            <div class="l2">Контент <small>поля</small></div>
+            <div class="l2">Дизайн <small>варианты</small></div>
+            <div class="l2">Добавить слайд</div>
+            <div class="l2">Скачать <small>PPTX/PDF</small></div>
+          </div>
+        </div>
+        <div class="l1">
+          <div class="l1__h"><b>Аккаунт</b><span class="mono">L1</span></div>
+          <div class="l1__body">
+            <div class="l2">Бренд</div>
+            <div class="l2">Фирменные шрифты</div>
+            <div class="l2">Настройки</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note">«Создание» — это поток (мастер), а не постоянный раздел меню: у него линейные шаги и выход в Редактор. В навигации он живёт под кнопкой «Создать презентацию».</div>
+  </section>
+
+  <!-- 3. CORE FLOWS -->
+  <section>
+    <div class="shead">
+      <span class="snum">03</span>
+      <div><h2>Основные потоки</h2><p>5 самых критичных путей от точки входа до цели. Зелёным отмечена достигнутая цель.</p></div>
+    </div>
+    <div class="card">
+      <div class="flow">
+        <div class="flow__head"><span class="flow__badge">A</span><span class="flow__name">Текст → готовая презентация</span><span class="flow__goal">Цель: <b>скачанный PPTX</b></span></div>
+        <div class="steps">
+          <div class="step"><div class="step__box"><span class="step__n">1</span><span class="step__l">Главная</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">2</span><span class="step__l">Создать</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">3</span><span class="step__l">Вставить текст</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">4</span><span class="step__l">Режим обработки</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">5</span><span class="step__l">Структура (превью)</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">6</span><span class="step__l">Редактор</span></div><span class="step__arrow">→</span></div>
+          <div class="step step--goal"><div class="step__box"><span class="step__n">7</span><span class="step__l">Скачать PPTX</span></div></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="flow__head"><span class="flow__badge">B</span><span class="flow__name">Готовый стиль в один клик</span><span class="flow__goal">Цель: <b>готовый дек</b></span></div>
+        <div class="steps">
+          <div class="step"><div class="step__box"><span class="step__n">1</span><span class="step__l">Создать</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">2</span><span class="step__l">Выбрать стиль</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">3</span><span class="step__l">Corporate White</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">4</span><span class="step__l">Редактор с готовой презой</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">5</span><span class="step__l">Правки текста</span></div><span class="step__arrow">→</span></div>
+          <div class="step step--goal"><div class="step__box"><span class="step__n">6</span><span class="step__l">Скачать</span></div></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="flow__head"><span class="flow__badge">C</span><span class="flow__name">С чистого листа</span><span class="flow__goal">Цель: <b>своя сборка</b></span></div>
+        <div class="steps">
+          <div class="step"><div class="step__box"><span class="step__n">1</span><span class="step__l">Создать</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">2</span><span class="step__l">Чистый лист</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">3</span><span class="step__l">Пустой редактор</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">4</span><span class="step__l">Добавить слайды из библиотеки</span></div><span class="step__arrow">→</span></div>
+          <div class="step step--goal"><div class="step__box"><span class="step__n">5</span><span class="step__l">Скачать</span></div></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="flow__head"><span class="flow__badge">D</span><span class="flow__name">AI-сборка одного слайда</span><span class="flow__goal">Цель: <b>заполненный слайд</b></span></div>
+        <div class="steps">
+          <div class="step"><div class="step__box"><span class="step__n">1</span><span class="step__l">Редактор</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">2</span><span class="step__l">Добавить слайд</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">3</span><span class="step__l">Навести → AI</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">4</span><span class="step__l">Вставить текст</span></div><span class="step__arrow">→</span></div>
+          <div class="step step--goal"><div class="step__box"><span class="step__n">5</span><span class="step__l">Слайд собран</span></div></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="flow__head"><span class="flow__badge">E</span><span class="flow__name">Вернуться и доработать</span><span class="flow__goal">Цель: <b>обновлённый файл</b></span></div>
+        <div class="steps">
+          <div class="step"><div class="step__box"><span class="step__n">1</span><span class="step__l">Мои презентации</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">2</span><span class="step__l">Открыть</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">3</span><span class="step__l">Правка текста / дизайна</span></div><span class="step__arrow">→</span></div>
+          <div class="step"><div class="step__box"><span class="step__n">4</span><span class="step__l">Скачать</span></div><span class="step__arrow">→</span></div>
+          <div class="step step--goal"><div class="step__box"><span class="step__n">5</span><span class="step__l">Шрифты (при нужде)</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. FRICTION -->
+  <section>
+    <div class="shead">
+      <span class="snum">04</span>
+      <div><h2>Предполагаемые точки трения</h2><p>4 момента с наибольшей вероятностью отказа — где пользователь закрывает вкладку, не дойдя до цели.</p></div>
+    </div>
+    <div class="grid g2">
+      <div class="card fric">
+        <span class="fric__rank">1</span>
+        <div>
+          <div class="fric__t">«Сколько слайдов получится?»</div>
+          <div class="fric__where">ПОТОК A · Prompt Manager → Структура</div>
+          <div class="fric__why">Пользователь вставил текст и <b>не уверен, что система разберёт его правильно</b> — раньше 6 разделов превращались в 10, и счётчик врал. Плюс развилка «весь текст / сжать» заставляет думать.</div>
+          <div class="fric__fix">Честный счётчик + предпросмотр структуры до генерации (уже улучшено); подсказать рекомендованный режим по умолчанию.</div>
+        </div>
+      </div>
+      <div class="card fric">
+        <span class="fric__rank">2</span>
+        <div>
+          <div class="fric__t">Паралич выбора стиля</div>
+          <div class="fric__where">ПОТОК B · Выбрать стиль</div>
+          <div class="fric__why">Без понимания разницы между стилями пользователь <b>боится выбрать не то</b> и застревает. Слишком много вариантов раньше усиливали ступор.</div>
+          <div class="fric__fix">Сокращено до 3 стилей + «Чистый лист»; добавить превью-миниатюры и пометку «Популярный».</div>
+        </div>
+      </div>
+      <div class="card fric">
+        <span class="fric__rank">3</span>
+        <div>
+          <div class="fric__t">Шрифт «слетел» в PPTX</div>
+          <div class="fric__where">ПОТОК A/E · Скачать → открыть в PowerPoint</div>
+          <div class="fric__why">На самом финише пользователь видит, что <b>презентация выглядит иначе</b>, чем в редакторе — нет фирменного шрифта на ПК. Разочарование в точке наибольшей ценности.</div>
+          <div class="fric__fix">Кнопка «Фирменные шрифты» + подсказка после экспорта (сделано); повысить заметность подсказки.</div>
+        </div>
+      </div>
+      <div class="card fric">
+        <span class="fric__rank">4</span>
+        <div>
+          <div class="fric__t">Пустой холст «с чего начать»</div>
+          <div class="fric__where">ПОТОК C · Чистый лист → Редактор</div>
+          <div class="fric__why">После выбора «Чистый лист» пользователь видит <b>пустой редактор и не знает следующего шага</b> — нужно догадаться про библиотеку слайдов.</div>
+          <div class="fric__fix">Сразу открывать библиотеку «Добавить слайд» (сделано); добавить пустое состояние с подсказкой-стрелкой.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. TAXONOMY -->
+  <section>
+    <div class="shead">
+      <span class="snum">05</span>
+      <div><h2>Таксономия контента</h2><p>Категории, метки и фильтры, чтобы нужный слайд находился менее чем за 3 клика в библиотеке «Добавить слайд».</p></div>
+    </div>
+    <div class="card tax">
+      <div class="tax__block">
+        <div class="tax__lbl">Категории слайдов (1-й клик — вкладка)</div>
+        <div class="chips">
+          <span class="chip chip--cat">Титул</span><span class="chip chip--cat">О компании</span><span class="chip chip--cat">Проблема</span><span class="chip chip--cat">Решение</span><span class="chip chip--cat">Услуги</span><span class="chip chip--cat">Преимущества</span><span class="chip chip--cat">Цифры</span><span class="chip chip--cat">Процесс</span><span class="chip chip--cat">Команда</span><span class="chip chip--cat">Сравнение</span><span class="chip chip--cat">Цены</span><span class="chip chip--cat">Контакты</span><span class="chip chip--cat">Таблица</span><span class="chip chip--cat">Дорожная карта</span><span class="chip chip--cat">Содержание</span>
+        </div>
+      </div>
+      <div class="tax__block">
+        <div class="tax__lbl">Фильтры (2-й клик — сузить)</div>
+        <div class="chips">
+          <span class="chip chip--filter">С фото</span><span class="chip chip--filter">Только текст</span><span class="chip chip--filter">С цифрами</span><span class="chip chip--filter">Тёмный фон</span><span class="chip chip--filter">Под выбранный стиль</span>
+        </div>
+      </div>
+      <div class="tax__block">
+        <div class="tax__lbl">Метки на карточках (визуальный признак)</div>
+        <div class="chips">
+          <span class="chip chip--label">премиум</span><span class="chip chip--label">с фото</span><span class="chip chip--label">авторский</span><span class="chip chip--label">тёмный</span><span class="chip chip--label">новый</span>
+        </div>
+      </div>
+      <div class="tax__block">
+        <div class="tax__lbl">Путь «найти за &lt; 3 клика»</div>
+        <div class="chips">
+          <span class="chip">1 · Открыть «Добавить слайд»</span><span class="chip">2 · Категория или поиск</span><span class="chip">3 · Выбрать вариант → вставить</span>
+        </div>
+      </div>
+    </div>
+    <div class="note">Поиск работает параллельно категориям (как в выборе иконок — по русским ключевым словам), чтобы опытные пользователи пропускали клики.</div>
+  </section>
+
+  <!-- 6. SCREEN MAP -->
+  <section>
+    <div class="shead">
+      <span class="snum">06</span>
+      <div><h2>Карта экранов</h2><p>Все представления: название, функция и связь со смежными экранами.</p></div>
+    </div>
+    <div class="card smap">
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-entry">ВХОД</span><span class="screen__name">Лендинг</span></div>
+        <div class="screen__fn">Объясняет ценность, ведёт к созданию. Точка входа для новых пользователей.</div>
+        <div class="screen__link"><b>→</b> Создание · Мои презентации</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-manage">УПРАВЛ.</span><span class="screen__name">Мои презентации</span></div>
+        <div class="screen__fn">Список сохранённых деков, открыть / дублировать / удалить.</div>
+        <div class="screen__link"><b>→</b> Редактор</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-flow">ПОТОК</span><span class="screen__name">Выбор стиля</span></div>
+        <div class="screen__fn">3 готовых стиля + Чистый лист. Задаёт визуальный язык всего дека.</div>
+        <div class="screen__link"><b>→</b> Prompt Manager / Редактор</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-flow">ПОТОК</span><span class="screen__name">Prompt Manager</span></div>
+        <div class="screen__fn">Вставка текста, выбор режима, честный счётчик слайдов.</div>
+        <div class="screen__link"><b>→</b> Структура-превью</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-flow">ПОТОК</span><span class="screen__name">Структура (превью)</span></div>
+        <div class="screen__fn">Подтверждение разбивки на слайды до генерации.</div>
+        <div class="screen__link"><b>→</b> Редактор</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-edit">ЯДРО</span><span class="screen__name">Редактор — холст</span></div>
+        <div class="screen__fn">Центр продукта: список слайдов, превью, прямое редактирование текста.</div>
+        <div class="screen__link"><b>→</b> Контент · Дизайн · Добавить · Скачать</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-edit">ЯДРО</span><span class="screen__name">Панель «Контент»</span></div>
+        <div class="screen__fn">Поля слайда: заголовки, тексты, пункты, фото-слоты, иконки.</div>
+        <div class="screen__link"><b>↔</b> Холст (двусторонняя связь)</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-edit">ЯДРО</span><span class="screen__name">Панель «Дизайн»</span></div>
+        <div class="screen__fn">Варианты раскладки слайда, тема, палитра — контент сохраняется.</div>
+        <div class="screen__link"><b>↔</b> Холст</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-edit">ЯДРО</span><span class="screen__name">Добавить слайд</span></div>
+        <div class="screen__fn">Библиотека по категориям + поиск + AI-сборка одного слайда.</div>
+        <div class="screen__link"><b>→</b> новый слайд в Холст</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-edit">ВЫХОД</span><span class="screen__name">Скачать (меню)</span></div>
+        <div class="screen__fn">PPTX / PDF / Фирменные шрифты. Точка достижения цели.</div>
+        <div class="screen__link"><b>→</b> Модалка шрифтов</div>
+      </div>
+      <div class="screen">
+        <div class="screen__top"><span class="screen__tag tag-manage">SETUP</span><span class="screen__name">Бренд / Шрифты / Настройки</span></div>
+        <div class="screen__fn">Логотип, акцент, фирменные шрифты, параметры аккаунта.</div>
+        <div class="screen__link"><b>→</b> применяется во всех деках</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PRIORITIZATION -->
+  <section>
+    <div class="shead">
+      <span class="snum">07</span>
+      <div><h2>Приоритизация по влиянию</h2><p>Что проектировать первым — по объёму использования × влиянию на бизнес-цель (созданная и скачанная презентация).</p></div>
+    </div>
+    <div class="card prio">
+      <div class="prio__row">
+        <span class="prio__p p0">P0</span>
+        <div class="prio__body">
+          <div class="prio__t">Prompt Manager + предпросмотр структуры</div>
+          <div class="prio__why">Ядро ценности и главный источник отказов. Если разбивка неверна — теряется всё остальное.</div>
+          <div class="prio__meta"><span>Объём <span class="bar"><i style="width:92%;background:var(--red)"></i></span></span><span>Влияние <span class="bar"><i style="width:96%;background:var(--red)"></i></span></span><span><b>Статус:</b> улучшено</span></div>
+        </div>
+      </div>
+      <div class="prio__row">
+        <span class="prio__p p0">P0</span>
+        <div class="prio__body">
+          <div class="prio__t">Редактор — холст + Контент/Дизайн</div>
+          <div class="prio__why">Используется каждую сессию. Здесь пользователь проводит 80% времени.</div>
+          <div class="prio__meta"><span>Объём <span class="bar"><i style="width:98%;background:var(--red)"></i></span></span><span>Влияние <span class="bar"><i style="width:88%;background:var(--red)"></i></span></span><span><b>Статус:</b> активно</span></div>
+        </div>
+      </div>
+      <div class="prio__row">
+        <span class="prio__p p1">P1</span>
+        <div class="prio__body">
+          <div class="prio__t">Экспорт PPTX/PDF + фирменные шрифты</div>
+          <div class="prio__why">Точка достижения бизнес-цели. Провал здесь обнуляет всю работу пользователя.</div>
+          <div class="prio__meta"><span>Объём <span class="bar"><i style="width:74%;background:var(--amber)"></i></span></span><span>Влияние <span class="bar"><i style="width:94%;background:var(--amber)"></i></span></span><span><b>Статус:</b> сделано</span></div>
+        </div>
+      </div>
+      <div class="prio__row">
+        <span class="prio__p p1">P1</span>
+        <div class="prio__body">
+          <div class="prio__t">Библиотека слайдов + AI-сборка</div>
+          <div class="prio__why">Двигатель потоков C и D. Чем легче найти и собрать слайд — тем выше завершаемость.</div>
+          <div class="prio__meta"><span>Объём <span class="bar"><i style="width:70%;background:var(--amber)"></i></span></span><span>Влияние <span class="bar"><i style="width:78%;background:var(--amber)"></i></span></span><span><b>Статус:</b> в работе</span></div>
+        </div>
+      </div>
+      <div class="prio__row">
+        <span class="prio__p p2">P2</span>
+        <div class="prio__body">
+          <div class="prio__t">Выбор стиля + Мои презентации</div>
+          <div class="prio__why">Важны, но используются реже и не на каждом пути. Влияют на возврат и первое впечатление.</div>
+          <div class="prio__meta"><span>Объём <span class="bar"><i style="width:52%;background:var(--blue)"></i></span></span><span>Влияние <span class="bar"><i style="width:60%;background:var(--blue)"></i></span></span><span><b>Статус:</b> базово есть</span></div>
+        </div>
+      </div>
+      <div class="prio__row">
+        <span class="prio__p p3">P3</span>
+        <div class="prio__body">
+          <div class="prio__t">Бренд-сетап + Настройки</div>
+          <div class="prio__why">Разовые действия. Нужны, но не блокируют основной путь к цели.</div>
+          <div class="prio__meta"><span>Объём <span class="bar"><i style="width:28%;background:var(--faint)"></i></span></span><span>Влияние <span class="bar"><i style="width:44%;background:var(--faint)"></i></span></span><span><b>Статус:</b> позже</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">Порядок проектирования: сначала довести P0 (Prompt Manager → Редактор) до безупречности, затем закрепить P1 (экспорт + библиотека), и только потом полировать P2–P3.</div>
+  </section>
+
+</div>
+</body>
+</html>

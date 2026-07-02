@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presa — Probe: вся библиотека шаблонов</title>
+<link rel="stylesheet" href="assets/styles.css" />
+<style>
+  body { margin: 0; background: #e9ebef; font-family: var(--font-sans, system-ui); }
+  .probe-head { padding: 18px 24px; background:#fff; border-bottom:1px solid #d7dae0; position:sticky; top:0; z-index:5; }
+  .probe-head h1 { margin:0; font-size:18px; }
+  .probe-head .sub { color:#5B6573; font-size:13px; margin-top:4px; }
+  .cat { padding: 8px 24px 4px; }
+  .cat h2 { font-size:14px; letter-spacing:.06em; text-transform:uppercase; color:#0E1116; margin:18px 0 2px; border-top:2px solid #0E1116; padding-top:10px; }
+  .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; padding: 6px 24px 24px; }
+  .cell { background:#fff; border:1px solid #d7dae0; border-radius:8px; overflow:hidden; }
+  .cell .lbl { font-family: ui-monospace, monospace; font-size:11px; color:#0E1116; padding:6px 8px; border-bottom:1px solid #eceef2; display:flex; justify-content:space-between; gap:8px; }
+  .cell .lbl b { color:#E5322B; }
+  .cell .lbl .lt { color:#8a92a0; }
+  .frame { width:100%; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="assets/data.js"></script>
+<script src="assets/templates.js"></script>
+<script src="assets/material-icons.js"></script>
+<script src="assets/fit.js"></script>
+
+<script type="text/babel" src="assets/slide-layouts.jsx"></script>
+<script type="text/babel" src="assets/layouts-construction.jsx"></script>
+<script type="text/babel" src="assets/layouts-pack2.jsx"></script>
+<script type="text/babel" src="assets/layouts-pack3.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+  const h = React.createElement;
+  const Lib = window.PresaTemplates;
+  const Fit = window.PresaFit;
+  const THEMES = window.PresaData.THEMES;
+
+  function Cell({ tpl }) {
+    const theme = (tpl.themeSupport && tpl.themeSupport.length === 1 && tpl.themeSupport[0] === 'dark')
+      ? window.PresaData.ensureTheme('tech__dark') && THEMES['tech__dark']
+      : THEMES.tech;
+    const fit = Fit.fitSlideContent(tpl, tpl.sample || {});
+    return h('div', { className: 'cell' },
+      h('div', { className: 'lbl' },
+        h('span', null, h('b', null, tpl.id), '  ', tpl.category),
+        h('span', { className: 'lt' }, tpl.layoutType)
+      ),
+      h('div', { className: 'frame' },
+        h(window.SlideRenderer, { template: tpl, fields: fit.fields, theme, scale: fit.scale, slideNumber: 1, total: 12, brand: 'Presa' })
+      )
+    );
+  }
+
+  function App() {
+    const cats = Lib.CATEGORIES;
+    return h('div', null,
+      h('div', { className: 'probe-head' },
+        h('h1', null, 'Probe — вся библиотека шаблонов'),
+        h('div', { className: 'sub' }, Lib.TEMPLATES.length + ' шаблонов · рендер через SlideRenderer + sample-данные · тема Tech (dark-only показаны на тёмной)')
+      ),
+      cats.map((c) => {
+        const items = Lib.byCategory(c.id);
+        if (!items.length) return null;
+        return h('div', { key: c.id, className: 'cat', 'data-cat': c.id },
+          h('h2', null, c.label + ' — ' + items.length),
+          h('div', { className: 'grid' }, items.map((t) => h(Cell, { key: t.id, tpl: t })))
+        );
+      })
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presa — Спринт 1: Таблицы и тарифы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#FFFFFF; --bg-subtle:#F6F7F9; --bg-sunken:#0C0E12;
+    --border:#E9EBEF; --border-strong:#DADDE3;
+    --text:#0E1116; --muted:#5B6573; --faint:#9AA2AE; --invert:#fff;
+    --red:#E5322B; --red-600:#CC241E; --red-700:#AC1B16; --red-50:#FFF2F0; --red-100:#FCE0DC;
+    --ink-700:#15181F; --ink-600:#1C2029;
+    --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sh-sm:0 1px 2px rgba(14,17,22,.04),0 2px 6px rgba(14,17,22,.05);
+    --sh-md:0 6px 22px -6px rgba(14,17,22,.10),0 2px 6px rgba(14,17,22,.05);
+    --sh-red:0 12px 28px -10px rgba(229,50,43,.35);
+    --pagebg:#ECEEF1;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--pagebg);font-family:var(--sans);color:var(--text);}
+
+  .top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--border);}
+  .top__in{max-width:1180px;margin:0 auto;padding:15px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:.01em;}
+  .brand__mk{width:27px;height:27px;border-radius:7px;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6px;box-shadow:var(--sh-red);}
+  .brand__mk span{width:12px;height:2px;background:#fff;border-radius:2px;}
+  .pill{font:600 12px var(--mono);color:var(--muted);background:#fff;border:1px solid var(--border);border-radius:99px;padding:6px 13px;letter-spacing:.02em;}
+  .note{max-width:1180px;margin:22px auto 6px;padding:0 26px;color:var(--muted);font-size:13.5px;line-height:1.6;}
+  .note b{color:var(--text);}
+
+  .stack{max-width:1180px;margin:0 auto;padding:18px 26px 100px;display:flex;flex-direction:column;gap:14px;}
+  .group{display:flex;align-items:center;gap:12px;margin:26px 2px 4px;}
+  .group__n{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--red);}
+  .group__l{flex:1;height:1px;background:var(--border-strong);}
+  .group__c{font:600 12px var(--mono);color:var(--faint);}
+
+  .frame__bar{display:flex;align-items:center;gap:11px;margin:14px 2px 9px;}
+  .frame__id{font:600 11.5px var(--mono);color:#fff;background:var(--text);padding:3px 8px;border-radius:6px;letter-spacing:.02em;}
+  .frame__t{font-size:13.5px;font-weight:700;letter-spacing:-0.01em;white-space:nowrap;}
+  .frame__tpl{font:500 11.5px var(--mono);color:var(--faint);margin-left:auto;letter-spacing:.01em;}
+  .card{border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(14,17,22,.10);border:1px solid rgba(14,17,22,.06);}
+
+  /* ============ SLIDE BASE ============ */
+  .slide{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;background:var(--bg);font-family:var(--sans);color:var(--text);}
+  .slide h1,.slide h2,.slide h3{margin:0;}
+  .accent{position:absolute;left:0;top:0;bottom:0;width:1.1cqw;background:linear-gradient(180deg,var(--red),var(--red-700));z-index:5;}
+  .pad{position:absolute;inset:0;padding:6cqw 7cqw 5cqw;display:flex;flex-direction:column;}
+  .eyebrow{display:inline-flex;align-items:center;gap:1.1cqw;font:600 1.5cqw var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--red);}
+  .eyebrow i{width:2.4cqw;height:0.22cqw;background:var(--red);display:inline-block;}
+  .s-title{font-weight:800;font-size:3.9cqw;letter-spacing:-0.02em;line-height:1.06;margin:1.7cqw 0 0;}
+  .s-sub{margin:1.2cqw 0 0;font-size:1.75cqw;line-height:1.45;color:var(--muted);max-width:74%;}
+  .foot{position:absolute;left:7cqw;right:7cqw;bottom:2.5cqw;display:flex;align-items:center;justify-content:space-between;font-size:1.4cqw;}
+  .foot__wm{display:flex;align-items:center;gap:0.9cqw;font-weight:800;letter-spacing:-.01em;color:var(--text);}
+  .foot__wm b{width:1.7cqw;height:1.7cqw;border-radius:0.4cqw;background:var(--red);display:inline-block;}
+  .foot__pg{font-family:var(--mono);color:var(--faint);letter-spacing:.04em;}
+
+  .ck{display:inline-flex;align-items:center;justify-content:center;}
+  .ck.yes{color:var(--red);} .ck.mid{color:var(--faint);} .ck.no{color:var(--border-strong);}
+
+  /* ===== T2 — Матрица «фича × тариф» ===== */
+  .mx{margin-top:2.4cqw;flex:1;display:flex;flex-direction:column;align-content:stretch;border:1px solid var(--border);border-radius:1.3cqw;overflow:hidden;min-height:0;}
+  .mx__r{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;align-items:center;flex:1;}
+  .mx__r + .mx__r{border-top:1px solid var(--border);}
+  .mx__hd{background:var(--bg-subtle);flex:0 0 auto;}
+  .mx__hd .mx__c{padding:1.1cqw 1.8cqw;font:700 1.5cqw var(--sans);}
+  .mx__c{padding:1.05cqw 1.8cqw;font-size:1.6cqw;text-align:center;}
+  .mx__c.feat{text-align:left;font-weight:600;color:var(--text);}
+  .mx__c.plan{font:700 1.6cqw var(--sans);color:var(--text);}
+  .mx__c.price{font-family:var(--mono);color:var(--muted);font-size:1.35cqw;font-weight:500;margin-top:0.2cqw;}
+  .mx__hi{background:var(--red-50);position:relative;}
+  .mx__hd .mx__hi{background:var(--red);color:#fff;}
+  .mx__tag{position:absolute;top:-0.0cqw;left:50%;transform:transl(-50%);}
+  .mx__pop{display:inline-block;font:600 1.1cqw var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.2);padding:0.3cqw 0.9cqw;border-radius:99px;margin-top:0.6cqw;}
+
+  /* ===== T3 — Сравнение: мы vs конкуренты ===== */
+  .cmp{margin-top:3cqw;flex:1;border:1px solid var(--border);border-radius:1.3cqw;overflow:hidden;display:flex;flex-direction:column;}
+  .cmp__r{display:grid;grid-template-columns:2.1fr 1fr 1fr 1fr;align-items:stretch;}
+  .cmp__r + .cmp__r{border-top:1px solid var(--border);}
+  .cmp__c{padding:1.5cqw 1.9cqw;font-size:1.7cqw;display:flex;align-items:center;justify-content:center;gap:0.8cqw;}
+  .cmp__c.feat{justify-content:flex-start;font-weight:600;}
+  .cmp__hd .cmp__c{font:700 1.7cqw var(--sans);padding:1.8cqw;}
+  .cmp__us{background:var(--red);color:#fff;}
+  .cmp__usband{background:var(--red-50);}
+  .cmp__r:last-child .cmp__us{border-radius:0;}
+  .cmp__co{color:var(--muted);}
+
+  /* ===== T4 — Прайс-матрица (цены в шапке) ===== */
+  .pm{margin-top:2.6cqw;flex:1;display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr;border-top:1px solid var(--border);}
+  .pm__cell{padding:1.35cqw 1.7cqw;border-bottom:1px solid var(--border);display:flex;align-items:center;font-size:1.62cqw;}
+  .pm__cell.center{justify-content:center;}
+  .pm__head{border-bottom:none;flex-direction:column;align-items:flex-start;gap:0.3cqw;padding-top:0;padding-bottom:1.8cqw;}
+  .pm__head.center{align-items:center;}
+  .pm__plan{font:800 2cqw var(--sans);letter-spacing:-0.01em;}
+  .pm__price{font-family:var(--mono);font-size:1.45cqw;color:var(--muted);}
+  .pm__col-hi{background:var(--red-50);}
+  .pm__plan.hi{color:var(--red-700);}
+  .pm__feat{font-weight:600;}
+  .pm__sub{display:block;font-size:1.2cqw;color:var(--faint);font-weight:500;margin-top:0.2cqw;}
+
+  /* ===== T5 — Роли / зоны ответственности ===== */
+  .rl{margin-top:2.6cqw;flex:1;border:1px solid var(--border);border-radius:1.3cqw;overflow:hidden;display:flex;flex-direction:column;}
+  .rl__r{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr;align-items:center;flex:1;}
+  .rl__r + .rl__r{border-top:1px solid var(--border);}
+  .rl__hd{background:var(--bg-subtle);flex:0 0 auto;}
+  .rl__c{padding:1.2cqw 1.8cqw;font-size:1.6cqw;display:flex;justify-content:center;}
+  .rl__c.feat{justify-content:flex-start;font-weight:600;}
+  .rl__hd .rl__c{font:700 1.5cqw var(--sans);}
+  .tag{font:600 1.25cqw var(--mono);letter-spacing:.04em;padding:0.45cqw 1.1cqw;border-radius:99px;}
+  .tag.r{background:var(--red);color:#fff;}
+  .tag.a{background:var(--red-50);color:var(--red-700);border:1px solid var(--red-100);}
+  .tag.c{background:var(--bg-subtle);color:var(--muted);border:1px solid var(--border);}
+  .tag.x{color:var(--faint);}
+
+  /* ===== T6 — Данные с итоговой строкой ===== */
+  .dt{margin-top:3cqw;flex:1;border:1px solid var(--border);border-radius:1.3cqw;overflow:hidden;}
+  .dt__r{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;align-items:center;}
+  .dt__r + .dt__r{border-top:1px solid var(--border);}
+  .dt__hd{background:var(--text);}
+  .dt__hd .dt__c{color:#fff;font:700 1.55cqw var(--sans);}
+  .dt__c{padding:1.45cqw 2cqw;font-size:1.68cqw;text-align:right;font-family:var(--mono);color:var(--muted);}
+  .dt__c.lab{text-align:left;font-family:var(--sans);font-weight:600;color:var(--text);}
+  .dt__pos{color:var(--red);font-weight:600;}
+  .dt__total{background:var(--red-50);}
+  .dt__total .dt__c{font-weight:700;color:var(--text);font-size:1.9cqw;}
+  .dt__total .dt__c.lab{color:var(--red-700);}
+
+  /* ===== T7 — Таблица с мини-барами ===== */
+  .bt{margin-top:3cqw;flex:1;display:flex;flex-direction:column;gap:0;border-top:1px solid var(--border);}
+  .bt__r{display:grid;grid-template-columns:1.5fr 2.4fr auto;align-items:center;gap:2.4cqw;padding:1.55cqw 0.4cqw;border-bottom:1px solid var(--border);}
+  .bt__lab{font-size:1.78cqw;font-weight:600;}
+  .bt__lab s{display:block;text-decoration:none;font:500 1.3cqw var(--mono);color:var(--faint);margin-top:0.2cqw;}
+  .bt__track{height:1.5cqw;background:var(--bg-subtle);border-radius:99px;overflow:hidden;}
+  .bt__fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--red-600));}
+  .bt__fill.soft{background:var(--border-strong);}
+  .bt__val{font:800 2.1cqw var(--sans);letter-spacing:-0.02em;min-width:7cqw;text-align:right;}
+  .bt__val.soft{color:var(--faint);font-weight:700;}
+
+  /* ===== P4 — 3 тарифа, выделен центр ===== */
+  .tier3{margin-top:2.4cqw;flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:1.8cqw;align-items:stretch;min-height:0;}
+  .tier{border:1px solid var(--border);border-radius:1.4cqw;padding:2cqw 2cqw;display:flex;flex-direction:column;background:#fff;}
+  .tier.hi{background:var(--text);color:#fff;border-color:var(--text);box-shadow:var(--sh-md);}
+  .tier__pop{align-self:flex-start;font:600 1.1cqw var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--red);padding:0.4cqw 1cqw;border-radius:99px;margin-bottom:1cqw;box-shadow:var(--sh-red);}
+  .tier__nm{font:700 1.8cqw var(--sans);}
+  .tier.hi .tier__nm{color:#fff;}
+  .tier__pr{font:800 3cqw var(--sans);letter-spacing:-0.03em;margin:0.5cqw 0 0.2cqw;}
+  .tier__pr s{text-decoration:none;font-size:1.4cqw;font-weight:600;color:var(--muted);}
+  .tier.hi .tier__pr s{color:rgba(255,255,255,.6);}
+  .tier__dv{height:1px;background:var(--border);margin:1.2cqw 0;}
+  .tier.hi .tier__dv{background:rgba(255,255,255,.16);}
+  .tier__f{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.85cqw;flex:1;}
+  .tier__f li{display:flex;gap:1cqw;align-items:flex-start;font-size:1.45cqw;line-height:1.28;color:var(--muted);}
+  .tier.hi .tier__f li{color:rgba(255,255,255,.85);}
+  .tier__f .ck{color:var(--red);flex:0 0 auto;margin-top:0.1cqw;}
+  .tier.hi .tier__f .ck{color:#fff;}
+  .tier__btn{margin-top:1.4cqw;text-align:center;font:700 1.5cqw var(--sans);padding:1.05cqw;border-radius:0.9cqw;border:1px solid var(--border-strong);color:var(--text);}
+  .tier__btn.red{background:var(--red);color:#fff;border-color:var(--red);box-shadow:var(--sh-red);}
+
+  /* ===== P5 — 2 тарифа крупно ===== */
+  .tier2{margin-top:3.2cqw;flex:1;display:grid;grid-template-columns:1fr 1fr;gap:2.2cqw;}
+  .big{border-radius:1.8cqw;padding:3.2cqw 3cqw;display:flex;flex-direction:column;border:1px solid var(--border);}
+  .big.dark{background:linear-gradient(150deg,var(--ink-600),var(--bg-sunken));color:#fff;border:none;position:relative;overflow:hidden;}
+  .big.dark::after{content:"";position:absolute;right:-6cqw;top:-6cqw;width:24cqw;height:24cqw;border-radius:50%;background:radial-gradient(circle,rgba(229,50,43,.32),transparent 70%);}
+  .big__top{display:flex;align-items:baseline;justify-content:space-between;gap:1cqw;position:relative;z-index:1;}
+  .big__nm{font:800 2.4cqw var(--sans);letter-spacing:-0.01em;}
+  .big__tag{font:600 1.25cqw var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--red);background:var(--red-50);border:1px solid var(--red-100);padding:0.5cqw 1.1cqw;border-radius:99px;}
+  .big.dark .big__tag{color:#fff;background:rgba(229,50,43,.22);border-color:rgba(229,50,43,.4);}
+  .big__pr{font:800 4.4cqw var(--sans);letter-spacing:-0.03em;margin:1.4cqw 0 0;position:relative;z-index:1;}
+  .big__pr s{text-decoration:none;font-size:1.6cqw;font-weight:600;color:var(--muted);}
+  .big.dark .big__pr s{color:rgba(255,255,255,.6);}
+  .big__d{margin:0.8cqw 0 0;font-size:1.6cqw;color:var(--muted);position:relative;z-index:1;}
+  .big.dark .big__d{color:rgba(255,255,255,.72);}
+  .big__f{list-style:none;margin:2.4cqw 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw 2cqw;position:relative;z-index:1;}
+  .big__f li{display:flex;gap:1cqw;align-items:flex-start;font-size:1.55cqw;line-height:1.3;}
+  .big__f .ck{color:var(--red);flex:0 0 auto;margin-top:0.1cqw;}
+  .big.dark .big__f .ck{color:#fff;}
+
+  /* ===== P6 — Один тариф + что входит ===== */
+  .one{margin-top:3cqw;flex:1;display:grid;grid-template-columns:0.92fr 1.08fr;gap:3cqw;align-items:center;}
+  .one__l{display:flex;flex-direction:column;}
+  .one__pr{font:800 8cqw var(--sans);letter-spacing:-0.04em;line-height:0.92;color:var(--red);}
+  .one__per{font:600 1.9cqw var(--sans);color:var(--text);margin-top:1cqw;}
+  .one__note{margin-top:1.6cqw;font-size:1.55cqw;color:var(--muted);line-height:1.5;max-width:90%;}
+  .one__btn{align-self:flex-start;margin-top:2.6cqw;font:700 1.8cqw var(--sans);background:var(--red);color:#fff;padding:1.5cqw 3cqw;border-radius:1cqw;box-shadow:var(--sh-red);}
+  .one__r{background:var(--bg-subtle);border:1px solid var(--border);border-radius:1.6cqw;padding:3cqw;}
+  .one__rt{font:700 1.5cqw var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1.8cqw;}
+  .one__list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:1.5cqw 2cqw;}
+  .one__list li{display:flex;gap:1.2cqw;align-items:flex-start;font-size:1.65cqw;line-height:1.3;}
+  .one__list .ck{color:#fff;background:var(--red);width:2.2cqw;height:2.2cqw;border-radius:50%;flex:0 0 auto;}
+
+  /* ===== P7 — Шкала ценности «от X ₽» ===== */
+  .scl{margin-top:3.4cqw;flex:1;display:flex;flex-direction:column;}
+  .scl__hero{display:flex;align-items:baseline;gap:1.6cqw;}
+  .scl__from{font:600 1.9cqw var(--sans);color:var(--muted);}
+  .scl__big{font:800 7.2cqw var(--sans);letter-spacing:-0.04em;line-height:0.9;}
+  .scl__big em{font-style:normal;color:var(--red);}
+  .scl__per{font:600 1.8cqw var(--sans);color:var(--muted);}
+  .scl__steps{margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;border-top:0.25cqw solid var(--border);padding-top:3cqw;}
+  .scl__steps:before{content:"";position:absolute;left:0;top:-0.25cqw;height:0.25cqw;width:33%;background:var(--red);}
+  .scl__st{padding-right:2.4cqw;position:relative;}
+  .scl__st:before{content:"";position:absolute;top:-3.55cqw;left:0;width:1.7cqw;height:1.7cqw;border-radius:50%;background:var(--bg);border:0.4cqw solid var(--border-strong);}
+  .scl__st.on:before{border-color:var(--red);background:var(--red);}
+  .scl__sp{font:800 2.6cqw var(--sans);letter-spacing:-0.02em;}
+  .scl__sn{font:600 1.55cqw var(--mono);color:var(--red);letter-spacing:.04em;margin-top:0.4cqw;}
+  .scl__sd{margin-top:0.7cqw;font-size:1.45cqw;line-height:1.4;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top__in">
+    <div class="brand"><span class="brand__mk"><span></span><span></span></span> Presa</div>
+    <span class="pill">Спринт 1 · Таблицы и тарифы</span>
+  </div>
+</div>
+<p class="note"><b>10 новых раскладок к переносу в библиотеку</b> — закрываем самые тонкие категории (table: было 1, pricing: было 3). Фирменная система red/white, шрифты Manrope + JetBrains Mono. Каждый кадр подписан будущим <b>id</b> и архетипом. Что одобрите — завожу во все три слоя (схема полей → экранная вёрстка → PPTX-рендер).</p>
+
+<div class="stack" id="stack"></div>
+
+<script>
+  const ck = (cls,d)=>'<span class="ck '+cls+'"><svg width="2cqw" height="2cqw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:2cqw;height:2cqw">'+d+'</svg></span>';
+  const YES = ck('yes','<path d="M20 6L9 17l-5-5"/>');
+  const MID = ck('mid','<path d="M5 12h14"/>');
+  const NO  = ck('no','<path d="M18 6L6 18M6 6l12 12"/>');
+  const foot = (n)=>`<div class="foot"><span class="foot__wm"><b></b>Presa</span><span class="foot__pg">${n} / 24</span></div>`;
+  const head = (eye,title,sub)=>`<div class="eyebrow"><i></i>${eye}</div><h2 class="s-title">${title}</h2>${sub?`<p class="s-sub">${sub}</p>`:''}`;
+
+  const SLIDES = [
+    {grp:'ТАБЛИЦЫ',cnt:'было 1 → станет 7',items:[
+      {id:'table-02',t:'Матрица «фича × тариф»',tpl:'feature_matrix · выделенная колонка',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Tariffs','Что входит в каждый тариф','Сравните возможности и выберите подходящий пакет.')}
+          <div class="mx">
+            <div class="mx__r mx__hd">
+              <div class="mx__c feat">Возможность</div>
+              <div class="mx__c"><div class="mx__c plan" style="padding:0">Start</div><div class="mx__c price" style="padding:0">0 ₽</div></div>
+              <div class="mx__c mx__hi"><div class="mx__c plan" style="padding:0;color:#fff">Team</div><div class="mx__c price" style="padding:0;color:rgba(255,255,255,.8)">2 900 ₽</div><span class="mx__pop">Популярный</span></div>
+              <div class="mx__c"><div class="mx__c plan" style="padding:0">Enterprise</div><div class="mx__c price" style="padding:0">по запросу</div></div>
+            </div>
+            ${[['Готовые шаблоны','5','Все','Все + кастом'],
+               ['AI-помощник по тексту',NO,YES,YES],
+               ['Экспорт в PPTX',YES,YES,YES],
+               ['Совместная работа','—','до 10','без лимита'],
+               ['Брендинг и шрифты',NO,YES,YES],
+               ['Поддержка','Почта','Приоритет','Менеджер']]
+              .map(r=>`<div class="mx__r">
+                <div class="mx__c feat">${r[0]}</div>
+                <div class="mx__c">${r[1]}</div>
+                <div class="mx__c mx__hi">${r[2]}</div>
+                <div class="mx__c">${r[3]}</div></div>`).join('')}
+          </div>
+          ${foot('11')}
+        </div></section>`},
+      {id:'table-03',t:'Сравнение: мы vs конкуренты',tpl:'compare_check · 3 колонки',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Compare','Почему выбирают Presa','Сравнение с типичными способами готовить презентации.')}
+          <div class="cmp">
+            <div class="cmp__r cmp__hd">
+              <div class="cmp__c feat">Критерий</div>
+              <div class="cmp__c cmp__us">Presa</div>
+              <div class="cmp__c">Дизайнер</div>
+              <div class="cmp__c">Вручную</div>
+            </div>
+            ${[['Скорость сборки',YES,NO,NO],
+               ['Единый фирменный стиль',YES,YES,MID],
+               ['Стоимость на масштабе',YES,NO,YES],
+               ['Правки без переверстки',YES,MID,NO],
+               ['Экспорт в PPTX',YES,MID,YES]]
+              .map((r,i,a)=>`<div class="cmp__r">
+                <div class="cmp__c feat">${r[0]}</div>
+                <div class="cmp__c cmp__usband">${r[1]}</div>
+                <div class="cmp__c cmp__co">${r[2]}</div>
+                <div class="cmp__c cmp__co">${r[3]}</div></div>`).join('')}
+          </div>
+          ${foot('12')}
+        </div></section>`},
+      {id:'table-04',t:'Прайс-матрица (цены в шапке)',tpl:'price_matrix · колонка-герой',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Pricing','Тарифы и что в них входит','')}
+          <div class="pm">
+            <div class="pm__cell pm__head"><div class="pm__plan">Возможности</div><div class="pm__price">помесячно</div></div>
+            <div class="pm__cell pm__head center"><div class="pm__plan">Start</div><div class="pm__price">0 ₽</div></div>
+            <div class="pm__cell pm__head center pm__col-hi"><div class="pm__plan hi">Team</div><div class="pm__price">2 900 ₽</div></div>
+            <div class="pm__cell pm__head center"><div class="pm__plan">Enterprise</div><div class="pm__price">от 12 900 ₽</div></div>
+            ${[['Пользователей','1','до 10','без лимита'],
+               ['Шаблоны','5','Все','Все + кастом'],
+               ['AI-генерация',NO,YES,YES],
+               ['Экспорт PPTX',YES,YES,YES],
+               ['Хранилище','1 ГБ','50 ГБ','1 ТБ'],
+               ['SLA и менеджер',NO,NO,YES]]
+              .map(r=>`<div class="pm__cell pm__feat">${r[0]}</div>
+                <div class="pm__cell center">${r[1]}</div>
+                <div class="pm__cell center pm__col-hi">${r[2]}</div>
+                <div class="pm__cell center">${r[3]}</div>`).join('')}
+          </div>
+          ${foot('13')}
+        </div></section>`},
+      {id:'table-05',t:'Роли / зоны ответственности',tpl:'role_matrix · цветные теги',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Process','Кто и за что отвечает','Прозрачное распределение ролей на каждом этапе проекта.')}
+          <div class="rl">
+            <div class="rl__r rl__hd">
+              <div class="rl__c feat">Этап работ</div>
+              <div class="rl__c">Presa</div>
+              <div class="rl__c">Клиент</div>
+              <div class="rl__c">Подрядчик</div>
+            </div>
+            ${[['Бриф и цели',['a','Ведём'],['r','Решает'],['x','—']],
+               ['Структура и текст',['r','Делаем'],['c','Согласует'],['x','—']],
+               ['Дизайн слайдов',['r','Делаем'],['c','Согласует'],['x','—']],
+               ['Данные и цифры',['c','Сверяет'],['r','Даёт'],['x','—']],
+               ['Финальная сборка',['r','Делаем'],['a','Принимает'],['c','Печать']]]
+              .map(r=>`<div class="rl__r">
+                <div class="rl__c feat">${r[0]}</div>
+                <div class="rl__c"><span class="tag ${r[1][0]}">${r[1][1]}</span></div>
+                <div class="rl__c"><span class="tag ${r[2][0]}">${r[2][1]}</span></div>
+                <div class="rl__c"><span class="tag ${r[3][0]}">${r[3][1]}</span></div></div>`).join('')}
+          </div>
+          ${foot('14')}
+        </div></section>`},
+      {id:'table-06',t:'Данные с итоговой строкой',tpl:'data_total · выделенный итог',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Results','Экономика перехода на Presa','Расчёт на команду из 10 человек за год.')}
+          <div class="dt">
+            <div class="dt__r dt__hd">
+              <div class="dt__c lab">Статья</div>
+              <div class="dt__c">Было</div>
+              <div class="dt__c">Стало</div>
+              <div class="dt__c">Разница</div>
+            </div>
+            ${[['Часов на презентацию','12','3','<span class="dt__pos">−75%</span>'],
+               ['Стоимость дизайна, ₽/мес','180 000','29 000','<span class="dt__pos">−84%</span>'],
+               ['Срок согласования, дней','5','1','<span class="dt__pos">−80%</span>'],
+               ['Презентаций в месяц','8','22','<span class="dt__pos">×2,7</span>']]
+              .map(r=>`<div class="dt__r">
+                <div class="dt__c lab">${r[0]}</div>
+                <div class="dt__c">${r[1]}</div>
+                <div class="dt__c">${r[2]}</div>
+                <div class="dt__c">${r[3]}</div></div>`).join('')}
+            <div class="dt__r dt__total">
+              <div class="dt__c lab">Экономия за год</div>
+              <div class="dt__c"></div>
+              <div class="dt__c"></div>
+              <div class="dt__c">1,8 млн ₽</div>
+            </div>
+          </div>
+          ${foot('15')}
+        </div></section>`},
+      {id:'table-07',t:'Таблица с мини-барами',tpl:'bar_table · значение + полоса',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Metrics','Метрики после внедрения','Сравнение ключевых показателей за первый квартал.')}
+          <div class="bt">
+            ${[['Скорость сборки','презентация, часы',88,'−75%',false],
+               ['Соблюдение бренда','доля слайдов в стиле',96,'96%',false],
+               ['Вовлечённость команды','активных пользователей',82,'82%',false],
+               ['Ручная верстка','осталось задач',18,'18%',true]]
+              .map(r=>`<div class="bt__r">
+                <div class="bt__lab">${r[0]}<s>${r[1]}</s></div>
+                <div class="bt__track"><div class="bt__fill ${r[4]?'soft':''}" style="width:${r[2]}%"></div></div>
+                <div class="bt__val ${r[4]?'soft':''}">${r[3]}</div></div>`).join('')}
+          </div>
+          ${foot('16')}
+        </div></section>`}
+    ]},
+    {grp:'ТАРИФЫ',cnt:'было 3 → станет 7',items:[
+      {id:'pricing-04',t:'Три тарифа, выделен центр',tpl:'tier_3_featured · популярный',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Pricing','Простые и честные тарифы','Без скрытых платежей. Меняйте план в любой момент.')}
+          <div class="tier3">
+            <div class="tier">
+              <div class="tier__nm">Start</div>
+              <div class="tier__pr">0 ₽<s> / мес</s></div>
+              <div class="tier__dv"></div>
+              <ul class="tier__f">
+                <li>${YES}5 базовых шаблонов</li>
+                <li>${YES}Экспорт в PPTX</li>
+                <li>${YES}1 пользователь</li>
+              </ul>
+              <div class="tier__btn">Начать бесплатно</div>
+            </div>
+            <div class="tier hi">
+              <span class="tier__pop">Популярный</span>
+              <div class="tier__nm">Team</div>
+              <div class="tier__pr">2 900 ₽<s> / мес</s></div>
+              <div class="tier__dv"></div>
+              <ul class="tier__f">
+                <li>${YES}Все шаблоны и обновления</li>
+                <li>${YES}AI-помощник по тексту</li>
+                <li>${YES}До 10 пользователей</li>
+                <li>${YES}Брендинг и шрифты</li>
+              </ul>
+              <div class="tier__btn red">Выбрать Team</div>
+            </div>
+            <div class="tier">
+              <div class="tier__nm">Enterprise</div>
+              <div class="tier__pr">по запросу</div>
+              <div class="tier__dv"></div>
+              <ul class="tier__f">
+                <li>${YES}Всё из Team</li>
+                <li>${YES}SSO и безопасность</li>
+                <li>${YES}Выделенный менеджер</li>
+              </ul>
+              <div class="tier__btn">Связаться</div>
+            </div>
+          </div>
+          ${foot('17')}
+        </div></section>`},
+      {id:'pricing-05',t:'Два тарифа крупно',tpl:'tier_2_big · светлый + тёмный',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Pricing','Два пакета под ваш масштаб','')}
+          <div class="tier2">
+            <div class="big">
+              <div class="big__top"><span class="big__nm">Team</span><span class="big__tag">для команд</span></div>
+              <div class="big__pr">2 900 ₽<s> / мес</s></div>
+              <div class="big__d">Всё, чтобы команда собирала презентации сама.</div>
+              <ul class="big__f">
+                <li>${YES}Все шаблоны</li><li>${YES}AI-помощник</li>
+                <li>${YES}До 10 человек</li><li>${YES}Брендинг</li>
+                <li>${YES}Экспорт PPTX</li><li>${YES}Приоритет-поддержка</li>
+              </ul>
+            </div>
+            <div class="big dark">
+              <div class="big__top"><span class="big__nm">Enterprise</span><span class="big__tag">для компаний</span></div>
+              <div class="big__pr">от 12 900 ₽<s> / мес</s></div>
+              <div class="big__d">Безопасность, интеграции и сопровождение.</div>
+              <ul class="big__f">
+                <li>${YES}Всё из Team</li><li>${YES}SSO / SAML</li>
+                <li>${YES}Без лимита мест</li><li>${YES}Кастом-шаблоны</li>
+                <li>${YES}API-доступ</li><li>${YES}Личный менеджер</li>
+              </ul>
+            </div>
+          </div>
+          ${foot('18')}
+        </div></section>`},
+      {id:'pricing-06',t:'Один тариф + что входит',tpl:'single_price · чек-лист',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Pricing','Одна подписка — всё включено','')}
+          <div class="one">
+            <div class="one__l">
+              <div class="one__pr">2 900 ₽</div>
+              <div class="one__per">в месяц за всю команду</div>
+              <div class="one__note">Фиксированная цена до 10 человек. Без доплат за шаблоны, экспорт и обновления.</div>
+              <div class="one__btn">Попробовать 14 дней</div>
+            </div>
+            <div class="one__r">
+              <div class="one__rt">Что входит</div>
+              <ul class="one__list">
+                <li>${YES}Все шаблоны</li>
+                <li>${YES}AI по тексту</li>
+                <li>${YES}Экспорт PPTX</li>
+                <li>${YES}Брендинг и шрифты</li>
+                <li>${YES}Совместная работа</li>
+                <li>${YES}Обновления</li>
+                <li>${YES}50 ГБ хранилища</li>
+                <li>${YES}Приоритет-поддержка</li>
+              </ul>
+            </div>
+          </div>
+          ${foot('19')}
+        </div></section>`},
+      {id:'pricing-07',t:'Шкала ценности «от X ₽»',tpl:'value_scale · 3 ступени',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Pricing','Цена растёт вместе с вами','Начните бесплатно и масштабируйтесь по мере роста команды.')}
+          <div class="scl">
+            <div class="scl__hero">
+              <span class="scl__from">от</span>
+              <span class="scl__big"><em>0 ₽</em></span>
+              <span class="scl__per">за старт — навсегда</span>
+            </div>
+            <div class="scl__steps">
+              <div class="scl__st on"><div class="scl__sp">0 ₽</div><div class="scl__sn">START</div><div class="scl__sd">Один пользователь, базовые шаблоны и экспорт.</div></div>
+              <div class="scl__st on"><div class="scl__sp">2 900 ₽</div><div class="scl__sn">TEAM</div><div class="scl__sd">Команда до 10, AI и весь набор возможностей.</div></div>
+              <div class="scl__st"><div class="scl__sp">от 12 900 ₽</div><div class="scl__sn">ENTERPRISE</div><div class="scl__sd">Без лимита мест, безопасность и менеджер.</div></div>
+            </div>
+          </div>
+          ${foot('20')}
+        </div></section>`}
+    ]}
+  ];
+
+  const stack = document.getElementById('stack');
+  stack.innerHTML = SLIDES.map(g=>`
+    <div class="group"><span class="group__n">${g.grp}</span><span class="group__l"></span><span class="group__c">${g.cnt}</span></div>
+    ${g.items.map(s=>`
+      <div class="frame">
+        <div class="frame__bar"><span class="frame__id">${s.id}</span><span class="frame__t">${s.t}</span><span class="frame__tpl">${s.tpl}</span></div>
+        <div class="card">${s.html}</div>
+      </div>`).join('')}
+  `).join('');
+</script>
+</body>
+</html>

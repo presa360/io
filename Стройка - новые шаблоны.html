@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>СтройМонолит — новые шаблоны (пример)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --display:'Manrope', system-ui, sans-serif;
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --ink:#15181C; --ink2:#33373D; --muted:#6E727A; --faint:#A4A8AF;
+    --line:#E7E2D8; --paper:#FBF9F5; --surface:#FFFFFF; --concrete:#EDE9E1;
+    --amber:#E0701A; --amber-d:#BC5910; --dark:#15181C; --dark2:#1E2228;
+    --pagebg:#E9E6DF;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--pagebg);font-family:var(--sans);color:var(--ink);}
+
+  /* page chrome */
+  .top{position:sticky;top:0;z-index:30;background:rgba(251,249,245,.86);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line);}
+  .top__in{max-width:1120px;margin:0 auto;padding:15px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:.02em;}
+  .brand__mk{width:26px;height:26px;border-radius:6px;background:var(--amber);display:flex;align-items:center;justify-content:center;color:#fff;}
+  .pill{font:600 12px var(--display);color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 13px;letter-spacing:.02em;}
+  .note{max-width:1120px;margin:22px auto 6px;padding:0 26px;color:var(--muted);font-size:13.5px;line-height:1.55;}
+  .note b{color:var(--ink);}
+
+  .stack{max-width:1120px;margin:0 auto;padding:18px 26px 90px;display:flex;flex-direction:column;gap:30px;}
+  .frame{background:transparent;}
+  .frame__bar{display:flex;align-items:center;gap:11px;margin:0 2px 10px;}
+  .frame__n{font:700 12px var(--display);color:var(--amber);}
+  .frame__t{font-size:13px;font-weight:700;letter-spacing:-0.01em;}
+  .frame__tpl{font:500 11.5px var(--display);color:var(--faint);margin-left:auto;letter-spacing:.02em;}
+  .card{border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(21,24,28,.10);border:1px solid rgba(21,24,28,.06);}
+
+  /* ============ SLIDE BASE ============ */
+  .slide{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;background:var(--surface);font-family:var(--sans);color:var(--ink);}
+  .slide h1,.slide h2,.slide h3{font-family:var(--display);margin:0;}
+  .blueprint{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px);background-size:4.4cqw 4.4cqw;pointer-events:none;}
+  .blueprint--ink{background-image:linear-gradient(rgba(21,24,28,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(21,24,28,.05) 1px,transparent 1px);}
+
+  .seclabel{display:flex;align-items:center;gap:1.4cqw;font:700 1.5cqw var(--display);letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+  .seclabel__n{color:var(--amber);}
+  .seclabel__bar{width:3.4cqw;height:0.28cqw;background:var(--amber);display:inline-block;}
+
+  /* ===== 1. COVER (split: dark panel + photo) ===== */
+  .cover{display:grid;grid-template-columns:1.04fr 0.96fr;background:var(--dark);color:#fff;}
+  .cover__l{position:relative;padding:6cqw;display:flex;flex-direction:column;overflow:hidden;}
+  .cover__l>*{position:relative;z-index:1;}
+  .cover__l .blueprint{opacity:.7;z-index:0;}
+  .cover__logo{display:flex;align-items:center;gap:1.3cqw;font-family:var(--display);font-weight:700;font-size:2cqw;letter-spacing:.04em;}
+  .cover__logo span{width:2.9cqw;height:2.9cqw;border-radius:0.6cqw;background:var(--amber);display:flex;align-items:center;justify-content:center;}
+  .cover__mid{flex:1;display:flex;flex-direction:column;justify-content:center;}
+  .kicker{display:flex;align-items:center;gap:1.6cqw;font:700 1.5cqw var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:2.6cqw;}
+  .kicker__line{width:5cqw;height:0.3cqw;background:var(--amber);}
+  .cover__h1{font-weight:800;font-size:4.4cqw;line-height:1.06;letter-spacing:-0.025em;}
+  .cover__h1 em{font-style:normal;color:var(--amber);}
+  .cover__sub{margin:2.4cqw 0 0;font-size:1.75cqw;line-height:1.5;color:rgba(255,255,255,.78);max-width:82%;}
+  .cover__foot{display:flex;align-items:center;justify-content:space-between;font:600 1.5cqw var(--display);color:rgba(255,255,255,.6);letter-spacing:.04em;}
+  .cover__idx{color:var(--amber);}
+  .cover__r{position:relative;overflow:hidden;}
+  .cover__r img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .cover__r:before{content:"";position:absolute;left:0;top:0;bottom:0;width:0.5cqw;background:var(--amber);z-index:2;}
+  .cover__r:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,13,15,0),rgba(12,13,15,.26));}
+  .cover__chip{position:absolute;left:0;bottom:6cqw;z-index:3;display:flex;align-items:center;gap:1.8cqw;background:#fff;color:var(--ink);padding:1.7cqw 2.4cqw;border-radius:0 1cqw 1cqw 0;box-shadow:0 1cqw 3cqw rgba(0,0,0,.32);}
+  .cover__chip b{font-family:var(--display);font-weight:700;font-size:3cqw;letter-spacing:-0.02em;line-height:1;}
+  .cover__chip s{text-decoration:none;font-size:1.25cqw;line-height:1.2;color:var(--muted);}
+  .cover__chip i{width:1px;height:3.4cqw;background:var(--line);}
+
+  /* ===== 2. ABOUT ===== */
+  .about{display:grid;grid-template-columns:1.15fr 1fr;}
+  .about__l{padding:6cqw;display:flex;flex-direction:column;}
+  .about__h{font-weight:700;font-size:4.4cqw;line-height:1.08;letter-spacing:-0.02em;margin:3cqw 0 0;}
+  .about__h em{font-style:normal;color:var(--amber);}
+  .about__p{margin:2.6cqw 0 0;color:var(--muted);font-size:1.95cqw;line-height:1.55;max-width:92%;}
+  .about__r{background:var(--concrete);padding:6cqw 5cqw;display:flex;flex-direction:column;justify-content:center;gap:0;position:relative;}
+  .about__stat{display:flex;align-items:baseline;gap:1.8cqw;padding:2.6cqw 0;border-bottom:1px solid var(--line);}
+  .about__stat:last-child{border-bottom:none;}
+  .about__stat b{font-family:var(--display);font-weight:700;font-size:5.4cqw;letter-spacing:-0.03em;color:var(--ink);min-width:8.5cqw;}
+  .about__stat span{font-size:1.7cqw;line-height:1.3;color:var(--muted);}
+  .about__r:before{content:"";position:absolute;left:0;top:6cqw;bottom:6cqw;width:0.4cqw;background:var(--amber);}
+
+  /* ===== 3. SERVICES ===== */
+  .pad{position:absolute;inset:0;padding:6cqw;display:flex;flex-direction:column;}
+  .head{display:flex;align-items:flex-end;justify-content:space-between;gap:3cqw;}
+  .head>div{flex:1 1 auto;min-width:0;}
+  .head__h{font-weight:700;font-size:4.2cqw;letter-spacing:-0.02em;margin:1.8cqw 0 0;}
+  .svc{margin-top:2.6cqw;flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line);}
+  .svc__i{padding:2.1cqw 2.4cqw;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;}
+  .svc__n{font:700 1.5cqw var(--display);color:var(--amber);letter-spacing:.04em;}
+  .svc__ic{margin-top:1cqw;color:var(--ink);}
+  .svc__h{font-family:var(--display);font-weight:600;font-size:2.1cqw;margin:1cqw 0 0;letter-spacing:-0.01em;}
+  .svc__d{margin:0.6cqw 0 0;font-size:1.4cqw;line-height:1.38;color:var(--muted);}
+
+  /* ===== 4. PROCESS ===== */
+  .proc{margin-top:auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2.2cqw;position:relative;padding-top:4cqw;}
+  .proc:before{content:"";position:absolute;left:1.5cqw;right:1.5cqw;top:5.1cqw;height:0.18cqw;background:var(--line);}
+  .proc__s{position:relative;}
+  .proc__dot{width:2.2cqw;height:2.2cqw;border-radius:50%;background:var(--surface);border:0.35cqw solid var(--amber);position:relative;z-index:2;}
+  .proc__n{font:700 1.4cqw var(--display);color:var(--amber);margin-top:1.8cqw;letter-spacing:.04em;}
+  .proc__h{font-family:var(--display);font-weight:600;font-size:2cqw;margin:0.6cqw 0 0;}
+  .proc__d{margin:0.7cqw 0 0;font-size:1.4cqw;line-height:1.4;color:var(--muted);}
+
+  /* ===== 5. PROJECTS ===== */
+  .proj{margin-top:3.4cqw;flex:1;display:grid;grid-template-columns:1.6fr 1fr;grid-template-rows:1fr 1fr;gap:1.6cqw;}
+  .proj__c{position:relative;border-radius:1cqw;overflow:hidden;background:#ddd;}
+  .proj__c--big{grid-row:1 / span 2;}
+  .proj__c img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .proj__cap{position:absolute;left:0;right:0;bottom:0;padding:2cqw;background:linear-gradient(0deg,rgba(12,13,15,.82),transparent);color:#fff;}
+  .proj__t{font-family:var(--display);font-weight:600;font-size:2cqw;}
+  .proj__m{font-size:1.35cqw;color:rgba(255,255,255,.8);margin-top:0.4cqw;}
+  .proj__c--big .proj__t{font-size:2.6cqw;}
+
+  /* ===== 6. NUMBERS (dark) ===== */
+  .nums{background:var(--dark);color:#fff;}
+  .nums .seclabel{color:rgba(255,255,255,.6);}
+  .nums__grid{margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,.14);}
+  .nums__c{padding:3.4cqw 2cqw 0 0;}
+  .nums__v{font-family:var(--display);font-weight:700;font-size:7cqw;letter-spacing:-0.04em;line-height:0.95;color:#fff;}
+  .nums__v em{font-style:normal;color:var(--amber);}
+  .nums__l{margin-top:1.4cqw;font-size:1.6cqw;line-height:1.35;color:rgba(255,255,255,.66);max-width:88%;}
+  .nums__h{font-weight:700;font-size:4.2cqw;letter-spacing:-0.02em;margin:1.8cqw 0 0;max-width:70%;}
+
+  /* ===== 7. WHY ===== */
+  .why{display:grid;grid-template-columns:1fr 0.62fr;}
+  .why__l{padding:6cqw;display:flex;flex-direction:column;}
+  .why__grid{margin-top:3.6cqw;flex:1;display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw;align-content:center;}
+  .why__i{display:flex;gap:1.8cqw;align-items:flex-start;}
+  .why__ic{width:4.2cqw;height:4.2cqw;border-radius:1cqw;background:#FBEFE4;color:var(--amber-d);display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .why__h{font-family:var(--display);font-weight:600;font-size:2.1cqw;}
+  .why__d{margin:0.6cqw 0 0;font-size:1.45cqw;line-height:1.42;color:var(--muted);}
+  .why__r{position:relative;background:#ddd;}
+  .why__r img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .why__r:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(224,112,26,.0),rgba(21,24,28,.12));}
+
+  /* ===== 8. CONTACT (dark) ===== */
+  .cta{background:var(--dark);color:#fff;}
+  .cta__h{font-weight:700;font-size:6cqw;letter-spacing:-0.025em;line-height:1.04;max-width:80%;}
+  .cta__h em{font-style:normal;color:var(--amber);}
+  .cta__row{margin-top:5cqw;display:flex;align-items:center;gap:3cqw;flex-wrap:wrap;}
+  .cta__btn{display:inline-flex;align-items:center;gap:1.2cqw;background:var(--amber);color:#fff;font-family:var(--display);font-weight:600;font-size:2cqw;padding:1.8cqw 3cqw;border-radius:1cqw;}
+  .cta__list{display:flex;gap:3.4cqw;font:600 1.8cqw var(--display);color:rgba(255,255,255,.82);}
+  .cta__list span{display:flex;align-items:center;gap:1cqw;}
+  .cta__dot{width:1cqw;height:1cqw;border-radius:50%;background:var(--amber);}
+  .corner{position:absolute;right:6cqw;top:6cqw;font:700 1.6cqw var(--display);color:rgba(255,255,255,.5);letter-spacing:.16em;}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top__in">
+    <div class="brand"><span class="brand__mk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 20V9l8-5 8 5v11M4 20h16M9 20v-6h6v6" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></span> СтройМонолит</div>
+    <span class="pill">Новые шаблоны · пример</span>
+  </div>
+</div>
+<p class="note"><b>Авторский дизайн с нуля</b> — не из текущей библиотеки. 8 слайдов для строительной компании: единая палитра (графит + амбер + бетон), архитектурная типографика, реальные фото. Если направление нравится — доработаю и заведу в шаблоны.</p>
+
+<div class="stack" id="stack"></div>
+
+<script>
+  const IMG = (id,w)=>'https://images.unsplash.com/photo-'+id+'?auto=format&fit=crop&w='+(w||1400)+'&q=72';
+  const P = {
+    crane:'1565008447742-97f6f38c985c', towers:'1486406146926-c627a92ad1ab',
+    glass:'1497215728101-856f4ea42174', loft:'1559136555-9303baea8ebd', hall:'1497366754035-f200968a6e72'
+  };
+  const I = {
+    plan:'M4 4h16v16H4zM4 9h16M9 9v11', cube:'M21 8l-9-5-9 5v8l9 5 9-5V8zM3 8l9 5 9-5M12 13v9',
+    facade:'M6 21V5l12-2v18M6 21h12M9 8h0M9 12h0M9 16h0M14 8h0M14 12h0M14 16h0',
+    gear:'M12 15a3 3 0 100-6 3 3 0 000 6zM19 12a7 7 0 00-.1-1l2-1.6-2-3.4-2.4 1a7 7 0 00-1.7-1L14.5 2h-5l-.3 2.6a7 7 0 00-1.7 1l-2.4-1-2 3.4L3 11a7 7 0 000 2l-2 1.6 2 3.4 2.4-1a7 7 0 001.7 1l.3 2.4h5l.3-2.6a7 7 0 001.7-1l2.4 1 2-3.4-2-1.6c.1-.3.1-.7.1-1z',
+    tree:'M12 2l5 8h-3l4 7H6l4-7H7l5-8zM12 17v5',
+    key:'M14 7a4 4 0 11-3.5 6H7v3H3v-4l7.5-7.5A4 4 0 0114 7z',
+    check:'M20 6L9 17l-5-5', shield:'M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3zM9.5 12l2 2 3.5-3.5',
+    clock:'M12 22a10 10 0 100-20 10 10 0 000 20zM12 6v6l4 2', doc:'M14 3H6a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V8l-5-5zM14 3v5h5',
+    pin:'M12 22s7-5.5 7-12a7 7 0 10-14 0c0 6.5 7 12 7 12zM12 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5'
+  };
+  const svg=(d,s,w,c)=>'<svg width="'+(s||'2.6cqw')+'" height="'+(s||'2.6cqw')+'" viewBox="0 0 24 24" fill="none" stroke="'+(c||'currentColor')+'" stroke-width="'+(w||1.8)+'" stroke-linecap="round" stroke-linejoin="round" style="width:'+(s||'2.6cqw')+';height:'+(s||'2.6cqw')+'">'+d.split('M').filter(Boolean).map(p=>'<path d="M'+p+'"/>').join('')+'</svg>';
+
+  const SLIDES = [
+    {n:'01',t:'Обложка',tpl:'Cover · сплит панель + фото',html:`
+      <section class="slide cover">
+        <div class="cover__l">
+          <div class="blueprint"></div>
+          <div class="cover__logo"><span>${svg(I.cube,'1.8cqw',2,'#fff')}</span>СТРОЙМОНОЛИТ</div>
+          <div class="cover__mid">
+            <div class="kicker"><span class="kicker__line"></span>Строительство полного цикла</div>
+            <h1 class="cover__h1">Строим объекты,<br>которые работают <em>десятилетиями</em></h1>
+            <p class="cover__sub">Жилые, складские и промышленные объекты под ключ.</p>
+          </div>
+          <div class="cover__foot"><span>Москва · с 2008</span><span class="cover__idx">01 / 08</span></div>
+        </div>
+        <div class="cover__r">
+          <img src="${IMG(P.crane)}" alt="">
+          <div class="cover__chip"><b>18</b><s>лет<br>на рынке</s><i></i><b>240</b><s>объектов<br>сдано</s></div>
+        </div>
+      </section>`},
+    {n:'02',t:'О компании',tpl:'About · сплит + метрики',html:`
+      <section class="slide about">
+        <div class="about__l">
+          <div class="seclabel"><span class="seclabel__bar"></span><span class="seclabel__n">02</span> О компании</div>
+          <h2 class="about__h">Генподрядчик полного цикла —<br><em>от проекта до ключей</em></h2>
+          <p class="about__p">18 лет проектируем и строим жильё, склады и производственные комплексы. Собственные бригады, техника и технадзор на каждом объекте — поэтому отвечаем за сроки и качество не на словах, а в договоре.</p>
+        </div>
+        <div class="about__r">
+          <div class="about__stat"><b>18</b><span>лет на рынке<br>строительства</span></div>
+          <div class="about__stat"><b>240</b><span>объектов сдано<br>в эксплуатацию</span></div>
+          <div class="about__stat"><b>1,2<span style="font-size:2.4cqw"> млн</span></b><span>м² построено<br>с 2008 года</span></div>
+        </div>
+      </section>`},
+    {n:'03',t:'Направления',tpl:'Services · сетка-таблица',html:`
+      <section class="slide"><div class="pad">
+        <div class="head">
+          <div><div class="seclabel"><span class="seclabel__bar"></span><span class="seclabel__n">03</span> Направления</div>
+          <h2 class="head__h">Что мы строим</h2></div>
+        </div>
+        <div class="svc">
+          ${[['01',I.plan,'Проектирование','Полный комплект рабочей документации и согласования'],
+             ['02',I.cube,'Монолитные работы','Фундаменты, каркас и несущие конструкции'],
+             ['03',I.facade,'Фасады','Навесные вентилируемые и мокрые системы'],
+             ['04',I.gear,'Инженерные сети','Отопление, вентиляция, водоснабжение, электрика'],
+             ['05',I.tree,'Благоустройство','Территория, дороги, озеленение и МАФ'],
+             ['06',I.key,'Сдача под ключ','Пуско-наладка, документы и гарантия до 5 лет']]
+            .map(s=>`<div class="svc__i"><div class="svc__n">${s[0]}</div><div class="svc__ic">${svg(s[1],'3cqw',1.7)}</div><div class="svc__h">${s[2]}</div><div class="svc__d">${s[3]}</div></div>`).join('')}
+        </div>
+      </div></section>`},
+    {n:'04',t:'Этапы',tpl:'Process · степпер',html:`
+      <section class="slide"><div class="pad">
+        <div class="seclabel"><span class="seclabel__bar"></span><span class="seclabel__n">04</span> Как мы работаем</div>
+        <h2 class="head__h">Прозрачный процесс на каждом этапе</h2>
+        <div class="proc">
+          ${[['01','Проект и смета','Согласуем объём, бюджет и сроки в договоре'],
+             ['02','Площадка','Подготовка, ограждение и нулевой цикл'],
+             ['03','Монолит','Каркас, перекрытия и несущие конструкции'],
+             ['04','Отделка и сети','Фасады, инженерия и внутренние работы'],
+             ['05','Сдача','Пуско-наладка, документы и гарантия']]
+            .map(s=>`<div class="proc__s"><div class="proc__dot"></div><div class="proc__n">ЭТАП ${s[0]}</div><div class="proc__h">${s[1]}</div><div class="proc__d">${s[2]}</div></div>`).join('')}
+        </div>
+      </div></section>`},
+    {n:'05',t:'Объекты',tpl:'Projects · галерея',html:`
+      <section class="slide"><div class="pad">
+        <div class="head"><div><div class="seclabel"><span class="seclabel__bar"></span><span class="seclabel__n">05</span> Наши объекты</div>
+        <h2 class="head__h">Ключевые объекты</h2></div></div>
+        <div class="proj">
+          <div class="proj__c proj__c--big"><img src="${IMG(P.towers)}"><div class="proj__cap"><div class="proj__t">ЖК «Гранд Парк»</div><div class="proj__m">Жилой комплекс · 84 000 м² · 2024</div></div></div>
+          <div class="proj__c"><img src="${IMG(P.glass,900)}"><div class="proj__cap"><div class="proj__t">БЦ «Меридиан»</div><div class="proj__m">Офисный центр · 21 000 м²</div></div></div>
+          <div class="proj__c"><img src="${IMG(P.crane,900)}"><div class="proj__cap"><div class="proj__t">РЦ «Восток»</div><div class="proj__m">Склад класса A · 24 000 м²</div></div></div>
+        </div>
+      </div></section>`},
+    {n:'06',t:'В цифрах',tpl:'Numbers · тёмный',html:`
+      <section class="slide nums"><div class="pad">
+        <div class="seclabel"><span class="seclabel__bar"></span><span class="seclabel__n">06</span> Результаты</div>
+        <h2 class="nums__h">Цифры, за которыми стоит репутация</h2>
+        <div class="nums__grid">
+          ${[['240','объектов сдано в эксплуатацию'],['95<em>%</em>','объектов сданы точно в срок'],['18','лет непрерывной работы'],['0','серьёзных замечаний при сдаче']]
+            .map(s=>`<div class="nums__c"><div class="nums__v">${s[0]}</div><div class="nums__l">${s[1]}</div></div>`).join('')}
+        </div>
+      </div></section>`},
+    {n:'07',t:'Преимущества',tpl:'Why · 2×2 + фото',html:`
+      <section class="slide why">
+        <div class="why__l">
+          <div class="seclabel"><span class="seclabel__bar"></span><span class="seclabel__n">07</span> Почему мы</div>
+          <h2 class="head__h" style="margin-top:1.8cqw">Снимаем главные риски стройки</h2>
+          <div class="why__grid">
+            ${[[I.doc,'Фиксированная смета','Цена и сроки закреплены в договоре'],
+               [I.shield,'Собственные ресурсы','Бригады и техника — без субподряда вслепую'],
+               [I.clock,'Контроль каждый день','Технадзор и фотоотчёты по графику'],
+               [I.check,'Гарантия до 5 лет','Отвечаем за результат после сдачи']]
+              .map(s=>`<div class="why__i"><div class="why__ic">${svg(s[0],'2.4cqw',1.9)}</div><div><div class="why__h">${s[1]}</div><div class="why__d">${s[2]}</div></div></div>`).join('')}
+          </div>
+        </div>
+        <div class="why__r"><img src="${IMG(P.loft)}"></div>
+      </section>`},
+    {n:'08',t:'Контакты',tpl:'CTA · тёмный',html:`
+      <section class="slide cta"><div class="blueprint"></div><div class="pad" style="justify-content:center">
+        <span class="corner">08 / 08</span>
+        <div class="seclabel" style="color:var(--amber)"><span class="seclabel__bar"></span> Следующий шаг</div>
+        <h2 class="cta__h" style="margin-top:2.4cqw">Обсудим <em>ваш объект</em><br>и рассчитаем смету</h2>
+        <div class="cta__row">
+          <span class="cta__btn">Запросить смету ${svg('M5 12h14M13 6l6 6-6 6','2cqw',2.4,'#fff')}</span>
+          <div class="cta__list">
+            <span><span class="cta__dot"></span>8 800 700-10-20</span>
+            <span><span class="cta__dot"></span>stroymonolit.ru</span>
+          </div>
+        </div>
+      </div></section>`}
+  ];
+
+  const stack = document.getElementById('stack');
+  stack.innerHTML = SLIDES.map(s=>`
+    <div class="frame">
+      <div class="frame__bar"><span class="frame__n">S${s.n}</span><span class="frame__t">${s.t}</span><span class="frame__tpl">${s.tpl}</span></div>
+      <div class="card">${s.html}</div>
+    </div>`).join('');
+</script>
+</body>
+</html>

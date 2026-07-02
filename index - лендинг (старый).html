@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presa — Корпоративные презентации с ИИ</title>
+<template id="__bundler_thumbnail" data-bg-color="#E5322B">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#E5322B"/>
+    <g fill="#ffffff">
+      <rect x="430" y="250" width="240" height="40" rx="20"/>
+      <rect x="430" y="330" width="240" height="40" rx="20" opacity="0.62"/>
+      <rect x="430" y="410" width="150" height="40" rx="20" opacity="0.4"/>
+    </g>
+    <path d="M740 250 L800 250 L770 540 Z" fill="#ffffff" opacity="0.92"/>
+  </svg>
+</template>
+<link rel="stylesheet" href="assets/styles.css" />
+<style>
+/* ============ LANDING-SPECIFIC ============ */
+
+/* ---- Nav ---- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  height: var(--nav-h);
+  background: rgba(255,255,255,.82);
+  backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav__inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 800; font-size: 19px; letter-spacing: -0.02em; }
+.brand__mark { width: 30px; height: 30px; flex: 0 0 auto; }
+.nav__links { display: flex; align-items: center; gap: 30px; }
+.nav__links a { font-size: 14.5px; font-weight: 600; color: var(--text-muted); transition: color .15s; }
+.nav__links a:hover { color: var(--text); }
+.nav__cta { display: flex; align-items: center; gap: 12px; }
+.nav__burger { display: none; }
+
+/* ---- Hero ---- */
+.hero { position: relative; padding: 78px 0 70px; overflow: hidden; }
+.hero__bg {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(560px 320px at 78% 8%, rgba(229,50,43,.07), transparent 70%),
+    radial-gradient(700px 420px at 12% 0%, rgba(14,17,22,.035), transparent 60%);
+}
+.hero__grid-lines {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(circle at 50% 32%, #000, transparent 72%);
+          mask-image: radial-gradient(circle at 50% 32%, #000, transparent 72%);
+}
+.hero__inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1.04fr 1fr; gap: 56px; align-items: center; }
+.hero__h1 { font-size: 56px; letter-spacing: -0.035em; margin: 20px 0 0; }
+.hero__h1 .accent { color: var(--red); }
+.hero__sub { margin-top: 22px; max-width: 530px; }
+.hero__cta { margin-top: 32px; display: flex; gap: 13px; flex-wrap: wrap; }
+.hero__trust { margin-top: 28px; display: flex; align-items: center; gap: 14px; color: var(--text-faint); font-size: 13.5px; }
+.hero__trust .avatars { display: flex; }
+.hero__trust .avatars span {
+  width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; margin-left: -8px;
+  background: linear-gradient(135deg, #ffd2cd, #e5322b); box-shadow: var(--shadow-xs);
+}
+.hero__trust .avatars span:first-child { margin-left: 0; }
+.hero__stars { color: var(--red); letter-spacing: 1px; }
+
+/* ---- Hero product mock ---- */
+.mock {
+  position: relative;
+  background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg); overflow: hidden;
+}
+.mock__bar { height: 38px; display: flex; align-items: center; gap: 7px; padding: 0 14px; border-bottom: 1px solid var(--border); background: var(--bg-subtle); }
+.mock__dot { width: 10px; height: 10px; border-radius: 50%; background: #d7dade; }
+.mock__url { margin-left: 10px; font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); }
+.mock__body { padding: 18px; display: grid; grid-template-columns: 116px 1fr; gap: 16px; }
+.mock__panel { background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--r-md); padding: 13px; }
+.mock__field { height: 9px; border-radius: 4px; background: #e4e7eb; margin-bottom: 9px; }
+.mock__field.sm { width: 60%; }
+.mock__btn { margin-top: 4px; height: 26px; border-radius: 6px; background: var(--red); display:flex; align-items:center; justify-content:center; }
+.mock__btn span { font-size: 9.5px; color: #fff; font-weight: 700; }
+.mock__slides { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; }
+.mslide { background: #fff; border: 1px solid var(--border); border-radius: 9px; padding: 11px; box-shadow: var(--shadow-xs); aspect-ratio: 16/10; position: relative; overflow: hidden; }
+.mslide::before { content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--red); }
+.mslide__t { height: 7px; width: 64%; border-radius: 3px; background: #1b1f27; margin: 2px 0 9px 4px; }
+.mslide__l { height: 5px; border-radius: 3px; background: #e4e7eb; margin: 0 0 6px 4px; }
+.mslide__l.s { width: 80%; }
+.mslide__l.xs { width: 55%; }
+.mslide--title { background: linear-gradient(150deg, #15181f, #0c0e12); }
+.mslide--title::before { background: var(--red); }
+.mslide--title .mslide__t { background: #fff; width: 70%; }
+.mslide--title .mslide__l { background: rgba(255,255,255,.22); }
+.mock__badge {
+  position: absolute; right: -14px; top: 64px; z-index: 3;
+  background: #fff; border: 1px solid var(--border); border-radius: var(--r-md);
+  box-shadow: var(--shadow-md); padding: 10px 13px; display: flex; align-items: center; gap: 9px;
+  animation: floaty 4.5s ease-in-out infinite;
+}
+@keyframes floaty { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-7px); } }
+.mock__badge .tick { width: 22px; height: 22px; border-radius: 50%; background: var(--red-50); color: var(--red); display:flex; align-items:center; justify-content:center; }
+.mock__badge b { font-size: 12.5px; }
+.mock__badge small { display:block; color: var(--text-faint); font-size: 10.5px; font-family: var(--font-mono); }
+
+/* ---- Logo strip ---- */
+.logos { padding: 30px 0 6px; }
+.logos__label { text-align:center; font-size: 12.5px; color: var(--text-faint); margin-bottom: 20px; font-weight: 600; }
+.logos__row { display:flex; align-items:center; justify-content:center; gap: 52px; flex-wrap: wrap; opacity: .62; }
+.logos__row span { font-weight: 800; font-size: 19px; letter-spacing: -0.02em; color: #8b919c; }
+
+/* ---- Section heading ---- */
+.shead { max-width: 680px; }
+.shead--center { margin: 0 auto; text-align: center; }
+.shead h2 { font-size: 40px; margin-top: 16px; }
+.shead p { margin-top: 16px; }
+
+/* ---- How it works ---- */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 54px; }
+.step { position: relative; padding-top: 26px; }
+.step__num { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--red); }
+.step__line { position:absolute; top: 7px; left: 0; right: 0; height: 1px; background: var(--border); }
+.step__dot { position:absolute; top: 4px; left: 0; width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+.step h3 { font-size: 19px; margin-top: 16px; }
+.step p { margin-top: 9px; font-size: 14.5px; color: var(--text-muted); line-height: 1.6; }
+
+/* ---- Benefits ---- */
+.benefits { background: var(--bg-subtle); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.bgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 50px; }
+.bcard { background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg); padding: 26px; box-shadow: var(--shadow-xs); transition: transform .18s ease, box-shadow .2s ease; }
+.bcard:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.bcard__icon { width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--red-50); color: var(--red); display:flex; align-items:center; justify-content:center; margin-bottom: 18px; }
+.bcard h3 { font-size: 18px; }
+.bcard p { margin-top: 10px; font-size: 14.5px; color: var(--text-muted); line-height: 1.6; }
+
+/* ---- Types ---- */
+.tgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 50px; }
+.tcard { position: relative; border: 1px solid var(--border); border-radius: var(--r-lg); padding: 24px; background: #fff; overflow: hidden; transition: border-color .2s, box-shadow .2s, transform .18s; }
+.tcard:hover { transform: translateY(-3px); border-color: var(--border-strong); box-shadow: var(--shadow-md); }
+.tcard__tag { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }
+.tcard h3 { font-size: 20px; margin-top: 14px; }
+.tcard p { margin-top: 9px; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
+.tcard__art { margin-top: 18px; height: 92px; border-radius: var(--r-sm); border: 1px solid var(--border); overflow: hidden; position: relative; background: var(--bg-subtle); }
+.tcard__arrow { position: absolute; top: 22px; right: 22px; color: var(--text-faint); transition: color .2s, transform .2s; }
+.tcard:hover .tcard__arrow { color: var(--red); transform: translate(2px,-2px); }
+
+/* mini slide art inside type cards */
+.art-rows { position:absolute; inset: 12px; display:flex; flex-direction:column; gap:6px; }
+.art-rows .r { height: 6px; border-radius: 3px; background: #dfe2e7; }
+.art-rows .r.t { width: 50%; background: var(--red); height: 7px; }
+.art-rows .r.a { width: 90%; }
+.art-rows .r.b { width: 72%; }
+.art-cols { position:absolute; inset: 12px; display:grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.art-cols .c { border-radius: 5px; background: #dfe2e7; }
+.art-cols .c.red { background: var(--red); }
+
+/* ---- CTA band ---- */
+.cta {
+  position: relative; overflow: hidden;
+  background: linear-gradient(155deg, #15181f 0%, #0c0e12 60%);
+  border-radius: var(--r-xl); padding: 64px 56px; color: #fff;
+}
+.cta__glow { position:absolute; inset:0; background: radial-gradient(520px 280px at 88% 20%, rgba(229,50,43,.4), transparent 65%); }
+.cta__inner { position: relative; z-index: 1; display:flex; align-items:center; justify-content:space-between; gap: 40px; flex-wrap: wrap; }
+.cta h2 { font-size: 38px; color: #fff; max-width: 560px; }
+.cta p { margin-top: 14px; color: rgba(255,255,255,.66); max-width: 480px; font-size: 17px; }
+
+/* ---- Footer ---- */
+.footer { border-top: 1px solid var(--border); padding: 56px 0 40px; }
+.footer__top { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 32px; }
+.footer__brand p { margin-top: 16px; color: var(--text-muted); font-size: 14px; max-width: 280px; line-height: 1.6; }
+.footer__col h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-faint); font-family: var(--font-mono); font-weight: 500; }
+.footer__col a { display:block; margin-top: 13px; font-size: 14.5px; color: var(--text-muted); transition: color .15s; }
+.footer__col a:hover { color: var(--red); }
+.footer__bottom { margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap: 16px; flex-wrap: wrap; color: var(--text-faint); font-size: 13px; }
+
+/* ---- Accent CTA button (sheen + lift) ---- */
+.btn-cta { position: relative; overflow: hidden; isolation: isolate; }
+.btn-cta::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -130%; width: 55%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.5), transparent);
+  transform: skewX(-18deg); z-index: -1; animation: ctaSheen 4s ease-in-out infinite;
+}
+@keyframes ctaSheen { 0%, 55% { left: -130%; } 100% { left: 175%; } }
+.btn-cta:hover { transform: translateY(-2px) scale(1.015); }
+@media (prefers-reduced-motion: reduce) { .btn-cta::after { animation: none; } }
+
+.hero__cta .btn-primary { font-size: 17px; padding: 17px 30px; box-shadow: 0 16px 40px -12px var(--red-glow), 0 0 0 1px rgba(229,50,43,.2); }
+.hero__ctahint { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-faint); font-weight: 600; }
+.hero__ctahint b { color: var(--red); font-weight: 700; }
+.hero__ctahint .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border-strong); }
+
+/* ---- Template gallery ---- */
+.gal__filters { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 40px; }
+.gal__pill { padding: 9px 17px; border-radius: var(--r-pill); border: 1.5px solid var(--border); background: #fff; font-family: inherit; font-weight: 700; font-size: 13.5px; color: var(--text-muted); cursor: pointer; transition: all .15s; }
+.gal__pill:hover { border-color: var(--border-strong); color: var(--text); }
+.gal__pill.on { background: var(--text); border-color: var(--text); color: #fff; }
+.gal__grid { margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.gal__card { display: block; }
+.gal__slide { position: relative; border-radius: var(--r-md); overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--border); transition: transform .2s ease, box-shadow .2s ease; }
+.gal__card:hover .gal__slide { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+.gal__slide::after { content: "Открыть в конструкторе →"; position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 15px; background: linear-gradient(0deg, rgba(14,17,22,.55), transparent 52%); color: #fff; font-weight: 700; font-size: 13px; opacity: 0; transition: opacity .2s; }
+.gal__card:hover .gal__slide::after { opacity: 1; }
+.gal__cap { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.gal__cap b { font-size: 14.5px; font-weight: 700; }
+.gal__cap span { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); white-space: nowrap; }
+.gal__foot { margin-top: 42px; display: flex; justify-content: center; }
+
+/* ---- Reveal ---- */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ---- Responsive ---- */
+@media (max-width: 940px) {
+  .hero__inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero__h1 { font-size: 44px; }
+  .steps { grid-template-columns: repeat(2, 1fr); row-gap: 38px; }
+  .bgrid, .tgrid { grid-template-columns: repeat(2, 1fr); }
+  .gal__grid { grid-template-columns: repeat(2, 1fr); }
+  .footer__top { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .nav__links { display: none; }
+}
+@media (max-width: 620px) {
+  .section { padding: 64px 0; }
+  .hero__h1 { font-size: 36px; }
+  .shead h2 { font-size: 30px; }
+  .bgrid, .tgrid, .steps { grid-template-columns: 1fr; }
+  .gal__grid { grid-template-columns: 1fr; }
+  .cta { padding: 44px 28px; }
+  .cta h2 { font-size: 28px; }
+  .mock__badge { display: none; }
+  .footer__top { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header class="nav">
+  <div class="container nav__inner">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="30" height="30" rx="8" fill="#E5322B"/>
+        <rect x="8.5" y="9" width="15" height="3.4" rx="1.7" fill="#fff"/>
+        <rect x="8.5" y="14.6" width="15" height="3.4" rx="1.7" fill="#fff" opacity=".66"/>
+        <rect x="8.5" y="20.2" width="9.5" height="3.4" rx="1.7" fill="#fff" opacity=".4"/>
+      </svg>
+      Presa
+    </a>
+    <nav class="nav__links">
+      <a href="#how">Как это работает</a>
+      <a href="#benefits">Возможности</a>
+      <a href="#types">Типы презентаций</a>
+      <a href="generator.html">Конструктор</a>
+    </nav>
+    <div class="nav__cta">
+      <a class="btn btn-ghost btn-sm" href="generator.html">Войти</a>
+      <a class="btn btn-primary btn-sm btn-cta" href="generator.html?new=1">Создать презентацию</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero__bg"></div>
+  <div class="hero__grid-lines"></div>
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      <span class="eyebrow">Конструктор презентаций с ИИ</span>
+      <h1 class="hero__h1">Соберите корпоративную презентацию <span class="accent">из готовых слайдов</span></h1>
+      <p class="hero__sub lead">Выбирайте категорию слайда и вариант дизайна из библиотеки, заполняйте поля — Presa сам подгонит текст под композицию. Или дайте ИИ собрать структуру по брифу. На выходе — редактируемый PPTX.</p>
+      <div class="hero__cta">
+        <a class="btn btn-primary btn-lg btn-cta" href="generator.html?new=1">
+          Создать презентацию
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-ghost btn-lg" href="generator.html">Посмотреть пример</a>
+      </div>
+      <div class="hero__ctahint">
+        <b>Бесплатно</b><span class="dot"></span>без регистрации<span class="dot"></span>готовый PPTX за минуты
+      </div>
+      <div class="hero__trust">
+        <div class="avatars"><span></span><span></span><span></span><span></span></div>
+        <div><span class="hero__stars">★★★★★</span> &nbsp;Команды продаж, маркетинга и HR уже экономят часы</div>
+      </div>
+    </div>
+
+    <!-- Product mock -->
+    <div class="hero__mock">
+      <div class="mock">
+        <div class="mock__bar">
+          <span class="mock__dot"></span><span class="mock__dot"></span><span class="mock__dot"></span>
+          <span class="mock__url">presa.io/generator</span>
+        </div>
+        <div class="mock__body">
+          <div class="mock__panel">
+            <div class="mock__field"></div>
+            <div class="mock__field sm"></div>
+            <div class="mock__field"></div>
+            <div class="mock__field sm"></div>
+            <div class="mock__field"></div>
+            <div class="mock__btn"><span>Добавить слайд</span></div>
+          </div>
+          <div class="mock__slides">
+            <div class="mslide mslide--title">
+              <div class="mslide__t"></div><div class="mslide__l s"></div><div class="mslide__l xs"></div>
+            </div>
+            <div class="mslide"><div class="mslide__t"></div><div class="mslide__l"></div><div class="mslide__l s"></div><div class="mslide__l xs"></div></div>
+            <div class="mslide"><div class="mslide__t"></div><div class="mslide__l"></div><div class="mslide__l s"></div><div class="mslide__l xs"></div></div>
+            <div class="mslide"><div class="mslide__t"></div><div class="mslide__l"></div><div class="mslide__l s"></div><div class="mslide__l xs"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="mock__badge">
+        <span class="tick">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div><b>PPTX готов</b><small>12 слайдов · 38 сек</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LOGO STRIP ===== -->
+<div class="container logos">
+  <p class="logos__label">Подходит для отделов продаж, маркетинга, HR и консалтинга</p>
+  <div class="logos__row">
+    <span>NORDWAVE</span><span>Mercato</span><span>Кварц</span><span>Helix B2B</span><span>Аркада</span>
+  </div>
+</div>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="shead reveal">
+      <span class="eyebrow">Как это работает</span>
+      <h2>Готовая презентация за&nbsp;четыре шага</h2>
+      <p class="lead">От выбора дизайна слайда до файла, который не стыдно отправить клиенту. Никакого верстания вручную.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="step__line"></div><div class="step__dot"></div>
+        <div class="step__num">01</div><h3>Выберите старт</h3>
+        <p>Соберите вручную из библиотеки слайдов или сгенерируйте структуру по короткому брифу.</p>
+      </div>
+      <div class="step reveal"><div class="step__line"></div><div class="step__dot"></div>
+        <div class="step__num">02</div><h3>Подберите дизайн</h3>
+        <p>Для каждой категории — несколько готовых вариантов композиции. Переключайтесь одним кликом.</p>
+      </div>
+      <div class="step reveal"><div class="step__line"></div><div class="step__dot"></div>
+        <div class="step__num">03</div><h3>Заполните поля</h3>
+        <p>Вводите свой текст — система сама подгоняет шрифты, отступы и переносы под выбранный дизайн.</p>
+      </div>
+      <div class="step reveal"><div class="step__line"></div><div class="step__dot"></div>
+        <div class="step__num">04</div><h3>Скачивайте PPTX</h3>
+        <p>Экспорт повторяет дизайн каждого слайда 16:9. Открывается в PowerPoint и Keynote.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BENEFITS ===== -->
+<section class="section benefits" id="benefits">
+  <div class="container">
+    <div class="shead shead--center reveal">
+      <span class="eyebrow eyebrow--center">Возможности</span>
+      <h2>Почему команды выбирают Presa</h2>
+      <p class="lead">Инструмент сделан под реальные B2B-задачи, а не под «красивую заглушку».</p>
+    </div>
+    <div class="bgrid">
+      <div class="bcard reveal">
+        <div class="bcard__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L4.5 12.5h6L11 22l8.5-11.5h-6L13 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+        <h3>Скорость вместо рутины</h3>
+        <p>То, что занимало полдня в редакторе, готово за минуты. Освобождает время на смысл, а не на выравнивание блоков.</p>
+      </div>
+      <div class="bcard reveal">
+        <div class="bcard__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+        <h3>Библиотека дизайнов</h3>
+        <p>15 категорий слайдов и несколько проработанных вариантов в каждой — от титула и команды до тарифов и дорожной карты.</p>
+      </div>
+      <div class="bcard reveal">
+        <div class="bcard__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 8h18" stroke="currentColor" stroke-width="1.8"/></svg></div>
+        <h3>Готовый PPTX</h3>
+        <p>Не картинка и не PDF — редактируемый файл с титулом, заголовками, тезисами и нумерацией слайдов.</p>
+      </div>
+      <div class="bcard reveal">
+        <div class="bcard__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 7h13l5 5-5 5H3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+        <h3>Автоподгонка контента</h3>
+        <p>Слишком длинный текст или лишние пункты? Presa аккуратно сократит и подскажет, сколько поместится в дизайн.</p>
+      </div>
+      <div class="bcard reveal">
+        <div class="bcard__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 4v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V7l7-4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+        <h3>Корпоративный тон</h3>
+        <p>Ясно, по-деловому, без штампов. Стиль — строгий, премиальный, tech или минималистичный, на выбор.</p>
+      </div>
+      <div class="bcard reveal">
+        <div class="bcard__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Два языка</h3>
+        <p>Русский и английский «из коробки». Один бриф — презентация для локального и международного рынка.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TYPES ===== -->
+<section class="section" id="types">
+  <div class="container">
+    <div class="shead shead--center reveal">
+      <span class="eyebrow eyebrow--center">Сценарии</span>
+      <h2>Под любой формат деловой презентации</h2>
+      <p class="lead">Шесть готовых сценариев — выберите свой и получите структуру под задачу.</p>
+    </div>
+    <div class="tgrid">
+      <a class="tcard reveal" href="generator.html?new=1">
+        <svg class="tcard__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="tcard__tag">// SALES</div>
+        <h3>Коммерческое предложение</h3>
+        <p>Проблема клиента, решение, выгода и условия — в убедительной последовательности.</p>
+        <div class="tcard__art"><div class="art-rows"><div class="r t"></div><div class="r a"></div><div class="r b"></div><div class="r a"></div></div></div>
+      </a>
+      <a class="tcard reveal" href="generator.html?new=1">
+        <svg class="tcard__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="tcard__tag">// COMPANY</div>
+        <h3>Презентация компании</h3>
+        <p>Кто вы, чем сильны, кейсы и команда — целостный рассказ о бизнесе.</p>
+        <div class="tcard__art"><div class="art-cols"><div class="c red"></div><div class="c"></div><div class="c"></div><div class="c"></div></div></div>
+      </a>
+      <a class="tcard reveal" href="generator.html?new=1">
+        <svg class="tcard__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="tcard__tag">// STARTUP</div>
+        <h3>Pitch deck</h3>
+        <p>Рынок, проблема, продукт, тяга и команда — структура для инвесторов.</p>
+        <div class="tcard__art"><div class="art-rows"><div class="r t"></div><div class="r a"></div><div class="r b"></div><div class="r a"></div></div></div>
+      </a>
+      <a class="tcard reveal" href="generator.html?new=1">
+        <svg class="tcard__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="tcard__tag">// PEOPLE</div>
+        <h3>HR-презентация</h3>
+        <p>Онбординг, ценности, бренд работодателя и внутренние программы.</p>
+        <div class="tcard__art"><div class="art-cols"><div class="c"></div><div class="c red"></div><div class="c"></div><div class="c"></div></div></div>
+      </a>
+      <a class="tcard reveal" href="generator.html?new=1">
+        <svg class="tcard__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="tcard__tag">// REPORT</div>
+        <h3>Отчёт</h3>
+        <p>Итоги периода, метрики и выводы — структурно и без перегруза цифрами.</p>
+        <div class="tcard__art"><div class="art-rows"><div class="r t"></div><div class="r a"></div><div class="r b"></div><div class="r a"></div></div></div>
+      </a>
+      <a class="tcard reveal" href="generator.html?new=1">
+        <svg class="tcard__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="tcard__tag">// WEBINAR</div>
+        <h3>Вебинар</h3>
+        <p>Сценарий выступления с тезисами и заметками спикера для каждого слайда.</p>
+        <div class="tcard__art"><div class="art-cols"><div class="c"></div><div class="c"></div><div class="c red"></div><div class="c"></div></div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TEMPLATE GALLERY ===== -->
+<section class="section" id="gallery">
+  <div class="container">
+    <div class="shead shead--center reveal">
+      <span class="eyebrow eyebrow--center">Примеры шаблонов</span>
+      <h2>Живая галерея реальных слайдов</h2>
+      <p class="lead">Это не картинки — настоящие слайды из конструктора. Выберите дизайн-направление и посмотрите, как выглядит набор.</p>
+    </div>
+    <div id="gallery-root"></div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="section section--tight">
+  <div class="container">
+    <div class="cta reveal">
+      <div class="cta__glow"></div>
+      <div class="cta__inner">
+        <div>
+          <h2>Соберите первую презентацию прямо сейчас</h2>
+          <p>Соберите слайды из библиотеки дизайнов или по брифу — и заберите готовый файл PPTX.</p>
+        </div>
+        <a class="btn btn-primary btn-lg btn-cta" href="generator.html?new=1">
+          Создать презентацию
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="brand" href="index.html">
+          <svg class="brand__mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <rect x="1" y="1" width="30" height="30" rx="8" fill="#E5322B"/>
+            <rect x="8.5" y="9" width="15" height="3.4" rx="1.7" fill="#fff"/>
+            <rect x="8.5" y="14.6" width="15" height="3.4" rx="1.7" fill="#fff" opacity=".66"/>
+            <rect x="8.5" y="20.2" width="9.5" height="3.4" rx="1.7" fill="#fff" opacity=".4"/>
+          </svg>
+          Presa
+        </a>
+        <p>AI-сервис для корпоративных презентаций. Библиотека слайдов → ваш контент → готовый PPTX.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Продукт</h4>
+        <a href="generator.html">Конструктор</a>
+        <a href="#how">Как это работает</a>
+        <a href="#benefits">Возможности</a>
+        <a href="#types">Сценарии</a>
+      </div>
+      <div class="footer__col">
+        <h4>Компания</h4>
+        <a href="#">О нас</a>
+        <a href="#">Блог</a>
+        <a href="#">Карьера</a>
+        <a href="#">Контакты</a>
+      </div>
+      <div class="footer__col">
+        <h4>Ресурсы</h4>
+        <a href="#">Документация</a>
+        <a href="#">Шаблоны</a>
+        <a href="#">Поддержка</a>
+        <a href="#">Статус</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Presa. Все права защищены.</span>
+      <span class="mono">Сделано для B2B-команд</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="assets/data.js"></script>
+<script src="assets/templates.js"></script>
+<script src="assets/material-icons.js"></script>
+<script src="assets/fit.js"></script>
+<script type="text/babel" src="assets/slide-layouts.jsx"></script>
+<script type="text/babel" src="assets/layouts-construction.jsx"></script>
+<script type="text/babel" src="assets/layouts-pack2.jsx"></script>
+<script type="text/babel" src="assets/layouts-pack3.jsx"></script>
+<script type="text/babel" src="assets/cx-ui.jsx"></script>
+<script type="text/babel" src="assets/landing-gallery.jsx"></script>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.14 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (Math.min(i % 4, 3) * 60) + 'ms';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>

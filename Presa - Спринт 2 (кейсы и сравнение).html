@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presa — Спринт 2: Кейсы и сравнение</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#FFFFFF; --bg-subtle:#F6F7F9; --bg-sunken:#0C0E12;
+    --border:#E9EBEF; --border-strong:#DADDE3;
+    --text:#0E1116; --muted:#5B6573; --faint:#9AA2AE; --invert:#fff;
+    --red:#E5322B; --red-600:#CC241E; --red-700:#AC1B16; --red-50:#FFF2F0; --red-100:#FCE0DC;
+    --ink-700:#15181F; --ink-600:#1C2029;
+    --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sh-sm:0 1px 2px rgba(14,17,22,.04),0 2px 6px rgba(14,17,22,.05);
+    --sh-md:0 6px 22px -6px rgba(14,17,22,.10),0 2px 6px rgba(14,17,22,.05);
+    --sh-red:0 12px 28px -10px rgba(229,50,43,.35);
+    --pagebg:#ECEEF1;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--pagebg);font-family:var(--sans);color:var(--text);}
+
+  .top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--border);}
+  .top__in{max-width:1180px;margin:0 auto;padding:15px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:.01em;}
+  .brand__mk{width:27px;height:27px;border-radius:7px;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6px;box-shadow:var(--sh-red);}
+  .brand__mk span{width:12px;height:2px;background:#fff;border-radius:2px;}
+  .pill{font:600 12px var(--mono);color:var(--muted);background:#fff;border:1px solid var(--border);border-radius:99px;padding:6px 13px;letter-spacing:.02em;}
+  .note{max-width:1180px;margin:22px auto 6px;padding:0 26px;color:var(--muted);font-size:13.5px;line-height:1.6;}
+  .note b{color:var(--text);}
+
+  .stack{max-width:1180px;margin:0 auto;padding:18px 26px 100px;display:flex;flex-direction:column;gap:14px;}
+  .group{display:flex;align-items:center;gap:12px;margin:26px 2px 4px;}
+  .group__n{font:700 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--red);}
+  .group__l{flex:1;height:1px;background:var(--border-strong);}
+  .group__c{font:600 12px var(--mono);color:var(--faint);}
+
+  .frame__bar{display:flex;align-items:center;gap:11px;margin:14px 2px 9px;}
+  .frame__id{font:600 11.5px var(--mono);color:#fff;background:var(--text);padding:3px 8px;border-radius:6px;letter-spacing:.02em;}
+  .frame__t{font-size:13.5px;font-weight:700;letter-spacing:-0.01em;white-space:nowrap;}
+  .frame__tpl{font:500 11.5px var(--mono);color:var(--faint);margin-left:auto;letter-spacing:.01em;}
+  .card{border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(14,17,22,.10);border:1px solid rgba(14,17,22,.06);}
+
+  /* ============ SLIDE BASE ============ */
+  .slide{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;background:var(--bg);font-family:var(--sans);color:var(--text);}
+  .slide h1,.slide h2,.slide h3{margin:0;}
+  .accent{position:absolute;left:0;top:0;bottom:0;width:1.1cqw;background:linear-gradient(180deg,var(--red),var(--red-700));z-index:5;}
+  .pad{position:absolute;inset:0;padding:6cqw 7cqw 5cqw;display:flex;flex-direction:column;}
+  .eyebrow{display:inline-flex;align-items:center;gap:1.1cqw;font:600 1.5cqw var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--red);}
+  .eyebrow i{width:2.4cqw;height:0.22cqw;background:var(--red);display:inline-block;}
+  .s-title{font-weight:800;font-size:3.9cqw;letter-spacing:-0.02em;line-height:1.06;margin:1.7cqw 0 0;}
+  .s-sub{margin:1.2cqw 0 0;font-size:1.75cqw;line-height:1.45;color:var(--muted);max-width:78%;}
+  .foot{position:absolute;left:7cqw;right:7cqw;bottom:2.5cqw;display:flex;align-items:center;justify-content:space-between;font-size:1.4cqw;}
+  .foot__wm{display:flex;align-items:center;gap:0.9cqw;font-weight:800;letter-spacing:-.01em;color:var(--text);}
+  .foot__wm b{width:1.7cqw;height:1.7cqw;border-radius:0.4cqw;background:var(--red);display:inline-block;}
+  .foot__pg{font-family:var(--mono);color:var(--faint);letter-spacing:.04em;}
+
+  .ck{display:inline-flex;align-items:center;justify-content:center;}
+
+  /* photo placeholder */
+  .ph{position:relative;overflow:hidden;background:linear-gradient(150deg,#1b1f27,#0c0e12);}
+  .ph .grid{position:absolute;inset:0;opacity:.5;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:3.4cqw 3.4cqw;}
+  .ph .glow{position:absolute;inset:0;background:radial-gradient(40cqw 40cqw at 72% 24%,rgba(229,50,43,.42),transparent 66%);}
+  .ph .lab{position:absolute;left:1.6cqw;bottom:1.4cqw;font:500 1.3cqw var(--mono);color:rgba(255,255,255,.74);display:flex;align-items:center;gap:0.8cqw;}
+  .ph .lab b{width:0.9cqw;height:0.9cqw;border-radius:50%;background:var(--red);display:inline-block;}
+
+  /* ===== C4 — До / После + KPI ===== */
+  .ba{margin-top:2.6cqw;flex:1;display:flex;flex-direction:column;gap:2.2cqw;min-height:0;}
+  .ba__row{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:2cqw;}
+  .ba__col{border:1px solid var(--border);border-radius:1.4cqw;padding:2.4cqw 2.4cqw;display:flex;flex-direction:column;}
+  .ba__col.after{border-color:var(--red-100);background:var(--red-50);}
+  .ba__tag{font:600 1.3cqw var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:0.8cqw;}
+  .ba__col.after .ba__tag{color:var(--red);}
+  .ba__tag b{width:1.4cqw;height:1.4cqw;border-radius:50%;display:inline-block;background:currentColor;}
+  .ba__list{list-style:none;margin:1.6cqw 0 0;padding:0;display:flex;flex-direction:column;gap:1cqw;}
+  .ba__list li{font-size:1.6cqw;line-height:1.32;color:var(--muted);display:flex;gap:1cqw;align-items:flex-start;}
+  .ba__col.after .ba__list li{color:var(--text);}
+  .ba__list .ck{flex:0 0 auto;margin-top:0.1cqw;color:var(--faint);}
+  .ba__col.after .ba__list .ck{color:var(--red);}
+  .ba__kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:2cqw;}
+  .ba__k{border-top:0.25cqw solid var(--red);padding-top:1.2cqw;}
+  .ba__kv{font:800 3.6cqw var(--sans);letter-spacing:-0.03em;color:var(--red);line-height:1;}
+  .ba__kl{margin-top:0.7cqw;font-size:1.45cqw;color:var(--muted);line-height:1.3;}
+
+  /* ===== C5 — Отзыв + результат ===== */
+  .qr{margin-top:2.6cqw;flex:1;display:grid;grid-template-columns:1.5fr 1fr;gap:3cqw;min-height:0;}
+  .qr__l{display:flex;flex-direction:column;justify-content:center;}
+  .qr__mark{font-family:Georgia,serif;color:var(--red);font-size:11cqw;line-height:0.6;height:5cqw;}
+  .qr__q{font-weight:700;font-size:2.9cqw;line-height:1.32;letter-spacing:-0.01em;color:var(--text);max-width:96%;}
+  .qr__by{margin-top:2.6cqw;display:flex;align-items:center;gap:1.4cqw;}
+  .qr__logo{width:4.4cqw;height:4.4cqw;border-radius:1cqw;background:var(--text);color:#fff;display:flex;align-items:center;justify-content:center;font:800 2.2cqw var(--sans);}
+  .qr__nm{font:700 1.85cqw var(--sans);}
+  .qr__rl{font-size:1.5cqw;color:var(--muted);margin-top:0.2cqw;}
+  .qr__r{background:var(--bg-subtle);border:1px solid var(--border);border-radius:1.5cqw;padding:2.6cqw;display:flex;flex-direction:column;justify-content:center;gap:0;}
+  .qr__stat{padding:1.7cqw 0;border-bottom:1px solid var(--border);}
+  .qr__stat:first-child{padding-top:0;} .qr__stat:last-child{border-bottom:none;padding-bottom:0;}
+  .qr__sv{font:800 3.6cqw var(--sans);letter-spacing:-0.03em;color:var(--red);line-height:1;}
+  .qr__sl{margin-top:0.5cqw;font-size:1.45cqw;color:var(--muted);}
+
+  /* ===== C6 — Таймлайн внедрения ===== */
+  .tl{margin-top:auto;margin-bottom:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2cqw;position:relative;padding-top:4.4cqw;}
+  .tl:before{content:"";position:absolute;left:1.2cqw;right:1.2cqw;top:5.3cqw;height:0.2cqw;background:var(--border);}
+  .tl__s{position:relative;}
+  .tl__dot{width:2.4cqw;height:2.4cqw;border-radius:50%;background:#fff;border:0.4cqw solid var(--border-strong);position:relative;z-index:2;}
+  .tl__s.on .tl__dot{border-color:var(--red);background:var(--red);box-shadow:var(--sh-red);}
+  .tl__w{font:600 1.35cqw var(--mono);color:var(--red);letter-spacing:.06em;margin-top:1.8cqw;text-transform:uppercase;}
+  .tl__h{font:700 2.1cqw var(--sans);margin:0.6cqw 0 0;letter-spacing:-0.01em;}
+  .tl__d{margin:0.7cqw 0 0;font-size:1.45cqw;line-height:1.4;color:var(--muted);max-width:94%;}
+  .tl__res{display:inline-block;margin-top:1cqw;font:800 2.4cqw var(--sans);color:var(--red);letter-spacing:-0.02em;}
+
+  /* ===== C7 — Результат + фото ===== */
+  .rp{position:absolute;inset:0;display:grid;grid-template-columns:0.92fr 1.08fr;}
+  .rp__l{position:relative;}
+  .rp__l .ph{position:absolute;inset:0;}
+  .rp__r{padding:6cqw 6cqw 5cqw;display:flex;flex-direction:column;}
+  .rp__chal{margin-top:2.4cqw;display:flex;flex-direction:column;gap:1.4cqw;}
+  .rp__line{display:flex;gap:1.4cqw;align-items:flex-start;}
+  .rp__lk{font:700 1.3cqw var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--red);flex:0 0 8cqw;padding-top:0.3cqw;}
+  .rp__lt{font-size:1.7cqw;line-height:1.4;color:var(--text);}
+  .rp__kpi{margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqw;padding-top:2.4cqw;border-top:1px solid var(--border);}
+  .rp__kv{font:800 3.4cqw var(--sans);letter-spacing:-0.03em;color:var(--red);line-height:1;}
+  .rp__kl{margin-top:0.6cqw;font-size:1.35cqw;color:var(--muted);line-height:1.3;}
+
+  /* ===== K5 — Мы vs они: две колонки ===== */
+  .vs{margin-top:2.6cqw;flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;position:relative;min-height:0;}
+  .vs__c{border-radius:1.6cqw;padding:3cqw 2.8cqw;display:flex;flex-direction:column;}
+  .vs__c.win{background:var(--text);color:#fff;position:relative;z-index:2;box-shadow:var(--sh-md);}
+  .vs__c.win.red{background:linear-gradient(155deg,var(--red),var(--red-700));}
+  .vs__c.lose{background:var(--bg-subtle);border:1px solid var(--border);margin-left:-1.6cqw;padding-left:4.4cqw;}
+  .vs__h{font:800 2.4cqw var(--sans);letter-spacing:-0.01em;display:flex;align-items:center;gap:1.2cqw;}
+  .vs__c.lose .vs__h{color:var(--muted);}
+  .vs__sub{font-size:1.45cqw;margin-top:0.6cqw;opacity:.8;}
+  .vs__c.lose .vs__sub{color:var(--faint);}
+  .vs__list{list-style:none;margin:2.2cqw 0 0;padding:0;display:flex;flex-direction:column;gap:1.3cqw;}
+  .vs__list li{display:flex;gap:1.2cqw;align-items:flex-start;font-size:1.65cqw;line-height:1.32;}
+  .vs__c.win .vs__list li{color:rgba(255,255,255,.92);}
+  .vs__c.lose .vs__list li{color:var(--muted);}
+  .vs__list .ck{flex:0 0 auto;margin-top:0.1cqw;color:#fff;}
+  .vs__c.lose .vs__list .ck{color:var(--faint);}
+  .vs__badge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;width:6cqw;height:6cqw;border-radius:50%;background:#fff;border:0.3cqw solid var(--border);box-shadow:var(--sh-md);display:flex;align-items:center;justify-content:center;font:800 1.7cqw var(--sans);color:var(--text);}
+
+  /* ===== K6 — До → После (трансформация) ===== */
+  .tf{margin-top:2.6cqw;flex:1;display:flex;flex-direction:column;gap:2.4cqw;min-height:0;}
+  .tf__row{flex:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:2cqw;}
+  .tf__state{border-radius:1.6cqw;padding:2.8cqw;height:100%;display:flex;flex-direction:column;justify-content:center;}
+  .tf__state.b{background:var(--bg-subtle);border:1px solid var(--border);}
+  .tf__state.a{background:linear-gradient(155deg,var(--red),var(--red-700));color:#fff;box-shadow:var(--sh-red);}
+  .tf__tag{font:600 1.3cqw var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);}
+  .tf__state.a .tf__tag{color:rgba(255,255,255,.78);}
+  .tf__big{font:800 2.7cqw var(--sans);letter-spacing:-0.02em;line-height:1.15;margin-top:1cqw;}
+  .tf__state.b .tf__big{color:var(--text);}
+  .tf__sm{margin-top:0.9cqw;font-size:1.5cqw;line-height:1.4;color:var(--muted);}
+  .tf__state.a .tf__sm{color:rgba(255,255,255,.84);}
+  .tf__arrow{width:5.4cqw;height:5.4cqw;border-radius:50%;background:var(--text);color:#fff;display:flex;align-items:center;justify-content:center;}
+  .tf__kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:2cqw;}
+  .tf__k{display:flex;align-items:baseline;gap:1cqw;}
+  .tf__kv{font:800 3cqw var(--sans);letter-spacing:-0.03em;color:var(--red);line-height:1;}
+  .tf__kl{font-size:1.45cqw;color:var(--muted);line-height:1.25;}
+
+  /* ===== K7 — Шкала по критериям ===== */
+  .sc{margin-top:2.6cqw;flex:1;display:flex;flex-direction:column;justify-content:center;gap:2.6cqw;}
+  .sc__legend{display:flex;gap:2.6cqw;margin-bottom:0.4cqw;}
+  .sc__lg{display:flex;align-items:center;gap:0.9cqw;font:600 1.4cqw var(--sans);}
+  .sc__lg b{width:1.5cqw;height:1.5cqw;border-radius:50%;display:inline-block;}
+  .sc__lg.us b{background:var(--red);} .sc__lg.them b{background:var(--border-strong);}
+  .sc__lg.them{color:var(--muted);}
+  .sc__row{display:grid;grid-template-columns:13cqw 1fr;align-items:center;gap:2.4cqw;}
+  .sc__lab{font:700 1.7cqw var(--sans);}
+  .sc__track{position:relative;height:0.9cqw;background:var(--bg-subtle);border:1px solid var(--border);border-radius:99px;}
+  .sc__fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,var(--red-100),var(--red));}
+  .sc__dot{position:absolute;top:50%;width:2.4cqw;height:2.4cqw;border-radius:50%;transform:translate(-50%,-50%);border:0.35cqw solid #fff;box-shadow:var(--sh-sm);}
+  .sc__dot.us{background:var(--red);z-index:2;}
+  .sc__dot.them{background:var(--border-strong);}
+
+  .b{font-weight:800;}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top__in">
+    <div class="brand"><span class="brand__mk"><span></span><span></span></span> Presa</div>
+    <span class="pill">Спринт 2 · Кейсы и сравнение</span>
+  </div>
+</div>
+<p class="note"><b>7 новых раскладок</b> — усиливаем доказательную часть дека (case_study: было 4, comparison: было 4). Та же система red/white. Каждый кадр подписан будущим <b>id</b> и архетипом. Что одобрите — завожу во все три слоя (схема полей → экранная вёрстка → PPTX-рендер).</p>
+
+<div class="stack" id="stack"></div>
+
+<script>
+  const ck = (d)=>'<span class="ck"><svg width="2cqw" height="2cqw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:2cqw;height:2cqw">'+d+'</svg></span>';
+  const YES = ck('<path d="M20 6L9 17l-5-5"/>');
+  const NO  = ck('<path d="M18 6L6 18M6 6l12 12"/>');
+  const ARR = '<svg width="2.6cqw" height="2.6cqw" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:2.6cqw;height:2.6cqw"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  const foot = (n)=>`<div class="foot"><span class="foot__wm"><b></b>Presa</span><span class="foot__pg">${n}</span></div>`;
+  const head = (eye,title,sub)=>`<div class="eyebrow"><i></i>${eye}</div><h2 class="s-title">${title}</h2>${sub?`<p class="s-sub">${sub}</p>`:''}`;
+
+  const SLIDES = [
+    {grp:'КЕЙСЫ',cnt:'было 4 → станет 8',items:[
+      {id:'case-04',t:'До / После + результаты',tpl:'before_after · 2 состояния + KPI',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Case','Как изменилась работа с презентациями','Отдел продаж Mercato — до и после внедрения Presa.')}
+          <div class="ba">
+            <div class="ba__row">
+              <div class="ba__col">
+                <div class="ba__tag"><b></b>Было</div>
+                <ul class="ba__list">
+                  <li>${NO}Верстали каждое КП вручную в PowerPoint</li>
+                  <li>${NO}Разный стиль у каждого менеджера</li>
+                  <li>${NO}2 дня на одно предложение</li>
+                </ul>
+              </div>
+              <div class="ba__col after">
+                <div class="ba__tag"><b></b>Стало</div>
+                <ul class="ba__list">
+                  <li>${YES}Единый шаблон с автоподгонкой контента</li>
+                  <li>${YES}Фирменный стиль на всех слайдах</li>
+                  <li>${YES}2 часа на готовое предложение</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ba__kpi">
+              <div class="ba__k"><div class="ba__kv">−87%</div><div class="ba__kl">времени на подготовку</div></div>
+              <div class="ba__k"><div class="ba__kv">×3,4</div><div class="ba__kl">предложений в месяц</div></div>
+              <div class="ba__k"><div class="ba__kv">+22%</div><div class="ba__kl">конверсия в сделку</div></div>
+            </div>
+          </div>
+          ${foot('Кейс · 06')}
+        </div></section>`},
+      {id:'case-05',t:'Отзыв + результат',tpl:'quote_result · цитата + KPI-панель',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Case','Что говорит клиент','')}
+          <div class="qr">
+            <div class="qr__l">
+              <div class="qr__mark">&ldquo;</div>
+              <blockquote class="qr__q">Presa сократила подготовку коммерческих предложений с двух дней до пары часов — и качество стало ровным во всём отделе.</blockquote>
+              <div class="qr__by">
+                <div class="qr__logo">M</div>
+                <div><div class="qr__nm">Анна Котова</div><div class="qr__rl">Руководитель продаж, Mercato</div></div>
+              </div>
+            </div>
+            <div class="qr__r">
+              <div class="qr__stat"><div class="qr__sv">−75%</div><div class="qr__sl">времени на КП</div></div>
+              <div class="qr__stat"><div class="qr__sv">4,9</div><div class="qr__sl">оценка отдела</div></div>
+              <div class="qr__stat"><div class="qr__sv">12</div><div class="qr__sl">менеджеров в работе</div></div>
+            </div>
+          </div>
+          ${foot('Кейс · 07')}
+        </div></section>`},
+      {id:'case-06',t:'Таймлайн внедрения',tpl:'case_timeline · недели → результат',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Case','Путь от брифа до результата','Внедрение заняло один месяц без остановки работы отдела.')}
+          <div class="tl">
+            <div class="tl__s on"><div class="tl__dot"></div><div class="tl__w">Неделя 1</div><div class="tl__h">Бриф и аудит</div><div class="tl__d">Собрали шаблоны и фирменный стиль клиента.</div></div>
+            <div class="tl__s on"><div class="tl__dot"></div><div class="tl__w">Неделя 2</div><div class="tl__h">Настройка</div><div class="tl__d">Завели брендбук, шрифты и библиотеку слайдов.</div></div>
+            <div class="tl__s on"><div class="tl__dot"></div><div class="tl__w">Неделя 3</div><div class="tl__h">Обучение</div><div class="tl__d">Команда собрала первые КП самостоятельно.</div></div>
+            <div class="tl__s on"><div class="tl__dot"></div><div class="tl__w">Неделя 4</div><div class="tl__h">Результат</div><div class="tl__res">−75% времени</div></div>
+          </div>
+          ${foot('Кейс · 08')}
+        </div></section>`},
+      {id:'case-07',t:'Результат + фото',tpl:'case_result_photo · визуал + 3 KPI',html:`
+        <section class="slide"><div class="accent"></div>
+          <div class="rp">
+            <div class="rp__l"><div class="ph"><div class="grid"></div><div class="glow"></div><div class="lab"><b></b>Скриншот: библиотека КП</div></div></div>
+            <div class="rp__r">
+              <div class="eyebrow"><i></i>Case · Nordwave</div>
+              <h2 class="s-title" style="font-size:3.4cqw">Аналитика, которую покупают с первого слайда</h2>
+              <div class="rp__chal">
+                <div class="rp__line"><div class="rp__lk">Задача</div><div class="rp__lt">Презентации продукта собирались неделями и выглядели по-разному.</div></div>
+                <div class="rp__line"><div class="rp__lk">Решение</div><div class="rp__lt">Единый набор шаблонов с автоподгонкой данных под бренд.</div></div>
+              </div>
+              <div class="rp__kpi">
+                <div><div class="rp__kv">−55%</div><div class="rp__kl">срок подготовки</div></div>
+                <div><div class="rp__kv">+18%</div><div class="rp__kl">конверсия демо</div></div>
+                <div><div class="rp__kv">120+</div><div class="rp__kl">слайдов в библиотеке</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="foot"><span></span><span class="foot__pg">Кейс · 09</span></div>
+        </section>`}
+    ]},
+    {grp:'СРАВНЕНИЕ',cnt:'было 4 → станет 7',items:[
+      {id:'comparison-05',t:'Мы vs они — две колонки',tpl:'vs_columns · win / lose + VS',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Compare','С Presa и без неё','')}
+          <div class="vs">
+            <div class="vs__c win red">
+              <div class="vs__h">С Presa</div>
+              <div class="vs__sub">Команда собирает презентации сама</div>
+              <ul class="vs__list">
+                <li>${YES}Минуты на готовый слайд</li>
+                <li>${YES}Единый фирменный стиль</li>
+                <li>${YES}Правки без переверстки</li>
+                <li>${YES}Экспорт в PPTX в один клик</li>
+              </ul>
+            </div>
+            <div class="vs__c lose">
+              <div class="vs__h">Без Presa</div>
+              <div class="vs__sub">Ручная вёрстка и подрядчики</div>
+              <ul class="vs__list">
+                <li>${NO}Часы и дни на презентацию</li>
+                <li>${NO}Разный стиль у каждого</li>
+                <li>${NO}Любая правка — заново</li>
+                <li>${NO}Зависимость от дизайнера</li>
+              </ul>
+            </div>
+            <div class="vs__badge">VS</div>
+          </div>
+          ${foot('Сравнение · 21')}
+        </div></section>`},
+      {id:'comparison-06',t:'До → После (трансформация)',tpl:'transformation · состояние → состояние',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Compare','Что меняется после перехода','')}
+          <div class="tf">
+            <div class="tf__row">
+              <div class="tf__state b">
+                <div class="tf__tag">Было</div>
+                <div class="tf__big">Презентация — это проект на неделю</div>
+                <div class="tf__sm">Брифы, дизайнер, бесконечные правки и разный результат.</div>
+              </div>
+              <div class="tf__arrow">${ARR}</div>
+              <div class="tf__state a">
+                <div class="tf__tag">Стало</div>
+                <div class="tf__big">Презентация — это задача на час</div>
+                <div class="tf__sm">Выбрал шаблон, заполнил, выгрузил. Стиль — единый.</div>
+              </div>
+            </div>
+            <div class="tf__kpi">
+              <div class="tf__k"><div class="tf__kv">−80%</div><div class="tf__kl">срока<br>подготовки</div></div>
+              <div class="tf__k"><div class="tf__kv">×3</div><div class="tf__kl">больше<br>презентаций</div></div>
+              <div class="tf__k"><div class="tf__kv">100%</div><div class="tf__kl">в фирменном<br>стиле</div></div>
+            </div>
+          </div>
+          ${foot('Сравнение · 22')}
+        </div></section>`},
+      {id:'comparison-07',t:'Шкала по критериям',tpl:'criteria_scale · позиции мы/они',html:`
+        <section class="slide"><div class="accent"></div><div class="pad">
+          ${head('Compare','Presa против привычных способов','Позиция по ключевым критериям — чем правее, тем лучше.')}
+          <div class="sc">
+            <div class="sc__legend">
+              <span class="sc__lg us"><b></b>Presa</span>
+              <span class="sc__lg them"><b></b>Дизайнер / вручную</span>
+            </div>
+            ${[['Скорость',92,32],['Единый стиль',96,48],['Стоимость на масштабе',88,28],['Гибкость правок',90,40]]
+              .map(r=>`<div class="sc__row">
+                <div class="sc__lab">${r[0]}</div>
+                <div class="sc__track">
+                  <div class="sc__fill" style="width:${r[1]}%"></div>
+                  <div class="sc__dot them" style="left:${r[2]}%"></div>
+                  <div class="sc__dot us" style="left:${r[1]}%"></div>
+                </div></div>`).join('')}
+          </div>
+          ${foot('Сравнение · 23')}
+        </div></section>`}
+    ]}
+  ];
+
+  const stack = document.getElementById('stack');
+  stack.innerHTML = SLIDES.map(g=>`
+    <div class="group"><span class="group__n">${g.grp}</span><span class="group__l"></span><span class="group__c">${g.cnt}</span></div>
+    ${g.items.map(s=>`
+      <div class="frame">
+        <div class="frame__bar"><span class="frame__id">${s.id}</span><span class="frame__t">${s.t}</span><span class="frame__tpl">${s.tpl}</span></div>
+        <div class="card">${s.html}</div>
+      </div>`).join('')}
+  `).join('');
+</script>
+</body>
+</html>
